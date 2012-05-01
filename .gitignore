@@ -10,3 +10,6 @@
 *.lai
 *.la
 *.a
+
+# Visual Source Safe files
+*.scc
