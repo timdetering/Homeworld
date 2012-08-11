@@ -273,7 +273,7 @@ void airAddedResourceCollector(Ship *ship)
     Resource *resource;
     SelectCommand selectone;
     udword new_team_num = aiCurrentAIPlayer->numSupportTeams;
-    AITeam *team;
+    struct AITeam *team;
 
     growSelectAddShip(&aiCurrentAIPlayer->airResourceCollectors, ship);
 
@@ -613,8 +613,8 @@ void airDivideSupportTasks(void)
 {
     udword num_teams, num_support_teams, num_teams_per_support, num_teams_leftover,i;
     udword num_ASF_teams = 0;
-    AITeam *teams[AIPLAYER_NUM_SUPPORTTEAMS];
-    AITeam *team;
+    struct AITeam *teams[AIPLAYER_NUM_SUPPORTTEAMS];
+    struct AITeam *team;
 
     num_teams         = aitFindNumTeamsWithFlag(TEAM_NEEDS_SUPPORT);
     num_support_teams = aiCurrentAIPlayer->numSupportTeams;

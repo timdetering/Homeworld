@@ -13,3 +13,28 @@
 
 # Visual Source Safe files
 *.scc
+
+# Generic build files:
+bin/
+obj/
+gen/
+Debug/
+
+
+# Visual Studio project files:
+*.aps
+*.ncb
+*.sln
+*.suo
+*.user
+
+# Diff tool files:
+*.orig
+*.bak
+
+# Windows OS files:
+Thumbs.db
+
+# Misc files:
+*.db
+*.cachefile

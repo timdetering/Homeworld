@@ -16,31 +16,31 @@
 /*=============================================================================
     Function Prototypes:
 =============================================================================*/
-void aihGenericEmptyFuelHandler(AITeam *team);
-void aihSwarmerEmptyFuelHandler(AITeam *team);
-void aihGenericFuelLowHandler(AITeam *team);
-void aihHarassNumbersLowHandler(AITeam *team);
-void aihHarassFiringSingleShipHandler(AITeam *team);
-void aihHarassDisengageSingleShipHandler(AITeam *team);
-void aihKamikazeHealthLowHandler(AITeam *team);
-void aihFastDefenseNumbersLowHandler(AITeam *team);
-void aihSlowDefenseNumbersLowHandler(AITeam *team);
-void aihGenericGettingRockedHandler(AITeam *team, SelectCommand *ships);
-void aihPatrolEnemyNearbyHandler(AITeam *team, SelectCommand *ships);
-void aihGravWellEnemyNearbyHandler(AITeam *team, SelectCommand *ships);
-void aihGravWellEnemyNotNearbyHandler(AITeam *team);
-void aihFastDefenseDistressHandler(AITeam *team, udword *intvar);
-void aihSlowDefenseDistressHandler(AITeam *team, udword *intvar);
+void aihGenericEmptyFuelHandler(struct AITeam *team);
+void aihSwarmerEmptyFuelHandler(struct AITeam *team);
+void aihGenericFuelLowHandler(struct AITeam *team);
+void aihHarassNumbersLowHandler(struct AITeam *team);
+void aihHarassFiringSingleShipHandler(struct AITeam *team);
+void aihHarassDisengageSingleShipHandler(struct AITeam *team);
+void aihKamikazeHealthLowHandler(struct AITeam *team);
+void aihFastDefenseNumbersLowHandler(struct AITeam *team);
+void aihSlowDefenseNumbersLowHandler(struct AITeam *team);
+void aihGenericGettingRockedHandler(struct AITeam *team, SelectCommand *ships);
+void aihPatrolEnemyNearbyHandler(struct AITeam *team, SelectCommand *ships);
+void aihGravWellEnemyNearbyHandler(struct AITeam *team, SelectCommand *ships);
+void aihGravWellEnemyNotNearbyHandler(struct AITeam *team);
+void aihFastDefenseDistressHandler(struct AITeam *team, udword *intvar);
+void aihSlowDefenseDistressHandler(struct AITeam *team, udword *intvar);
 
 //team died handlers
-void aihFastDefenseTeamDiedHandler(AITeam *team);
-void aihSlowDefenseTeamDiedHandler(AITeam *team);
-void aihGuardShipsTeamDiedHandler(AITeam *team);
+void aihFastDefenseTeamDiedHandler(struct AITeam *team);
+void aihSlowDefenseTeamDiedHandler(struct AITeam *team);
+void aihGuardShipsTeamDiedHandler(struct AITeam *team);
 void aihReconaissanceTeamDiedHandler(struct AITeam *team);
 void aihReconShipTeamDiedHandler(struct AITeam *team);
-void aihHarassTeamDiedHandler(AITeam *team);
-void aihPatrolTeamDiedHandler(AITeam *team);
-void aihRemoveTeamDiedHandler(AITeam *team);
+void aihHarassTeamDiedHandler(struct AITeam *team);
+void aihPatrolTeamDiedHandler(struct AITeam *team);
+void aihRemoveTeamDiedHandler(struct AITeam *team);
 
 
 #endif

@@ -88,7 +88,7 @@ void aidSendInvasionSignal(SelectCommand *ships)
     Outputs     :
     Return      : void
 ----------------------------------------------------------------------------*/
-void aidClearDistressSignal(AIPlayer *aiplayer)
+void aidClearDistressSignal(struct AIPlayer *aiplayer)
 {
     if (aiplayer->aidDefenseTargets)
     {

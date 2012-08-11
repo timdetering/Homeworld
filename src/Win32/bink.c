@@ -6,6 +6,10 @@
     Copyright Relic Entertainment, Inc.  All rights reserved.
 =============================================================================*/
 
+// unfortunately need this for the timers
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
 #include <stdlib.h>
 #include "bink.h"
 #include "main.h"

@@ -16,6 +16,7 @@
 #include "AIAttackMan.h"
 #include "AIVar.h"
 #include "AIFeatures.h"
+#include "AITeam.h"
 
 typedef enum
 {
@@ -90,8 +91,7 @@ typedef enum
 #define ALERT_CLOAK_RED             0x00000002
 #define ALERT_SWARMER_TARGETS       0x00000100
 
-
-typedef struct AIPlayer
+ struct AIPlayer
 {
     Player *player;
     AIPlayerLevel aiplayerDifficultyLevel;
@@ -195,14 +195,14 @@ typedef struct AIPlayer
     sdword teamsAllocated;
     sdword teamsUsed;
 
-} AIPlayer;
+};
 
 /*=============================================================================
     Global Variables:
 =============================================================================*/
 extern bool aiplayerLogEnable;
 
-extern AIPlayer *aiCurrentAIPlayer;
+extern struct AIPlayer *aiCurrentAIPlayer;
 extern uword    aiIndex;
 
 /*=============================================================================
@@ -395,11 +395,11 @@ extern real32          AIU_FIGHTER_VULNERABLE_MODIFIER;
     Functions
 =============================================================================*/
 
-AIPlayer *aiplayerInit(Player *player,AIPlayerLevel aiplayerLevel);
-void aiplayerClose(AIPlayer *aiplayer);
-void aiplayerPlay(AIPlayer *aiplayer);
+struct AIPlayer *aiplayerInit(Player *player,AIPlayerLevel aiplayerLevel);
+void aiplayerClose(struct AIPlayer *aiplayer);
+void aiplayerPlay(struct AIPlayer *aiplayer);
 void aiplayerUpdateAll(void);
-void aiplayerGameStart(AIPlayer *aiplayer);
+void aiplayerGameStart(struct AIPlayer *aiplayer);
 
 void aiplayerStartup(udword num_players, udword num_human_players, udword num_comp_players);
 void aiplayerShutdown(void);
@@ -421,7 +421,7 @@ void aiplayerShipLaunchedCallback(Ship *ship);
 void aiplayerPlayerDied(Player *player);
 
 void aiplayerChangeBigotry(udword newvalue);
-void aiplayerAddLeader(AIPlayer *aiplayer, ShipPtr ship);
+void aiplayerAddLeader(struct AIPlayer *aiplayer, ShipPtr ship);
 
 /*=============================================================================
     Save Game stuff
@@ -433,11 +433,11 @@ void aiplayerLoad(void);
 void SavePath(struct Path *path);
 struct Path *LoadPath(void);
 
-AIPlayer *NumberToAIPlayer(sdword number);
-sdword AIPlayerToNumber(AIPlayer *aiplayer);
-struct AITeam *AITeamIndexToTeam(AIPlayer *aiplayer,sdword index);
+struct AIPlayer *NumberToAIPlayer(sdword number);
+sdword AIPlayerToNumber(struct AIPlayer *aiplayer);
+struct AITeam *AITeamIndexToTeam(struct AIPlayer *aiplayer,sdword index);
 sdword AITeamToTeamIndex(struct AITeam *team);
 
-extern AIPlayer *fixingThisAIPlayer;
+extern struct AIPlayer *fixingThisAIPlayer;
 
 #endif

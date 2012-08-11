@@ -69,8 +69,8 @@ real32 popupTextEndTime;
 sdword popupTextWidth;
 
 // this can help eliminate the need to pass the current team ptr to some functions
-extern AITeam *CurrentTeamP;
-extern AITeam *kasUnpausedTeam;
+extern struct AITeam *CurrentTeamP;
+extern struct AITeam *kasUnpausedTeam;
 
 // run-time scoping for variables, timers, etc.
 extern sdword CurrentMissionScope;  // what level we're currently executing at
@@ -1341,7 +1341,7 @@ sdword kasfMissionSkillGet(void)
 
 void kasfRequestShips(char *shipType, sdword numShips)
 {
-    AITeam *teamp;
+    struct AITeam *teamp;
     ShipType st = StrToShipType(shipType);
 //    if (st < 0)
 //        st = LightInterceptor;
@@ -1358,7 +1358,7 @@ void kasfRequestShips(char *shipType, sdword numShips)
 
 void kasfRequestShipsOriginal(sdword percentOriginal)
 {
-    AITeam *teamp;
+    struct AITeam *teamp;
     sbyte numShips = (sbyte)((CurrentTeamP->kasOrigShipsCount * (real32)percentOriginal * 0.01f) + 0.5f);
     if (numShips <= 0)
     {
@@ -1392,7 +1392,7 @@ void kasfReinforceTeamWithShips(struct AITeam *teamtoreinforce,GrowSelection *sh
     }
 }
 
-void kasfReinforce(AITeam *team)
+void kasfReinforce(struct AITeam *team)
 {
     aitDeleteAllTeamMoves(CurrentTeamP);
     aimCreateReinforce(CurrentTeamP, team, SAME_FORMATION, CurrentTeamP->kasTactics, TRUE, TRUE);
@@ -1418,7 +1418,7 @@ void kasfForceCombatStatus(GrowSelection *ships, sdword on)
     }
 }
 
-sdword kasfThisTeamIs(AITeam *team)
+sdword kasfThisTeamIs(struct AITeam *team)
 {
     return (team == CurrentTeamP);
 }
@@ -1451,7 +1451,7 @@ void kasfTeamGiveToAI(void)
 
 void kasfDisableAIFeature(sdword feature, sdword type)
 {
-    AIPlayer *aiplayer = aiCurrentAIPlayer;
+    struct AIPlayer *aiplayer = aiCurrentAIPlayer;
 
     switch (type)
     {
@@ -1474,7 +1474,7 @@ void kasfDisableAIFeature(sdword feature, sdword type)
 }
 void kasfEnableAIFeature(sdword feature, sdword type)
 {
-    AIPlayer *aiplayer = aiCurrentAIPlayer;
+    struct AIPlayer *aiplayer = aiCurrentAIPlayer;
 
     switch (type)
     {
@@ -1909,7 +1909,7 @@ sdword kasfTeamDockedReadyForLaunch(void)
 //
 void kasfMsgSendAll(char *msg)
 {
-    AITeam *teamp;
+    struct AITeam *teamp;
     sdword i;
 
     for (i = 0; i < aiCurrentAIPlayer->teamsUsed; i++)
@@ -3018,7 +3018,7 @@ void kasfKamikaze(GrowSelection *targets)
 
 void kasfKamikazeEveryone(GrowSelection *targets)
 {
-    AITeam *teamp;
+    struct AITeam *teamp;
     udword i;
 
     if (targets->selection->numShips && targets->selection->ShipPtr[0] != NULL)

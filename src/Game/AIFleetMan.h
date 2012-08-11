@@ -20,6 +20,6 @@ void aifDefenseManRequestsShipsCB(ShipType shiptype,sdword number,sdword priorit
 
 void aifTeamRequestsShipsCB(ShipType shiptype,sdword number,struct AITeam *team,char *doneSetVar, sdword priority);
 
-void aifHyperspaceInit(AIPlayer *aiplayer);
+void aifHyperspaceInit(struct AIPlayer *aiplayer);
 #endif
 

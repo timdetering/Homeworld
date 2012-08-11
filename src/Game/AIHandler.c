@@ -90,7 +90,7 @@ aieHandlerSimple aieNumToHandler(sdword num)
     Outputs     : Kills a ship
     Return      : void
 ----------------------------------------------------------------------------*/
-void aihGenericEmptyFuelHandler(AITeam *team)
+void aihGenericEmptyFuelHandler(struct AITeam *team)
 {
     sdword i;
     SelectCommand scuttleship;
@@ -118,7 +118,7 @@ void aihGenericEmptyFuelHandler(AITeam *team)
     Outputs     : Kills a ship
     Return      : void
 ----------------------------------------------------------------------------*/
-void aihSwarmerEmptyFuelHandler(AITeam *team)
+void aihSwarmerEmptyFuelHandler(struct AITeam *team)
 {
     sdword i, numShips = team->shipList.selection->numShips;
     ShipPtr ship;
@@ -149,7 +149,7 @@ void aihSwarmerEmptyFuelHandler(AITeam *team)
     Outputs     :
     Return      : void
 ----------------------------------------------------------------------------*/
-void aihGenericFuelLowHandler(AITeam *team)
+void aihGenericFuelLowHandler(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove, *newMove;
 
@@ -171,7 +171,7 @@ void aihGenericFuelLowHandler(AITeam *team)
     Outputs     :
     Return      : void
 ----------------------------------------------------------------------------*/
-void aihHarassNumbersLowHandler(AITeam *team)
+void aihHarassNumbersLowHandler(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove, *newMove;
     AlternativeShips alternatives;
@@ -252,7 +252,7 @@ void aihHarassNumbersLowHandler(AITeam *team)
     Outputs     :
     Return      : void
 ----------------------------------------------------------------------------*/
-void aihHarassFiringSingleShipHandler(AITeam *team)
+void aihHarassFiringSingleShipHandler(struct AITeam *team)
 {
     aiuWrapFormation(team->shipList.selection,AIH_HARASS_SINGLEATTACK_FORMATION);
     aieHandlerSetDisengage(team->curMove, TRUE, aihHarassDisengageSingleShipHandler);
@@ -266,7 +266,7 @@ void aihHarassFiringSingleShipHandler(AITeam *team)
     Outputs     :
     Return      : void
 ----------------------------------------------------------------------------*/
-void aihHarassDisengageSingleShipHandler(AITeam *team)
+void aihHarassDisengageSingleShipHandler(struct AITeam *team)
 {
     aiuWrapFormation(team->shipList.selection, team->curMove->formation);
     team->curMove->events.firing.triggered = FALSE;
@@ -281,7 +281,7 @@ void aihHarassDisengageSingleShipHandler(AITeam *team)
     Outputs     : Forces pilots to kill themselves in the name of greater good
     Return      : void
 ----------------------------------------------------------------------------*/
-void aihKamikazeHealthLowHandler(AITeam *team)
+void aihKamikazeHealthLowHandler(struct AITeam *team)
 {
     MaxSelection shipsToDie;
     udword i;
@@ -316,7 +316,7 @@ void aihKamikazeHealthLowHandler(AITeam *team)
     Outputs     :
     Return      : void
 ----------------------------------------------------------------------------*/
-void aihFastDefenseNumbersLowHandler(AITeam *team)
+void aihFastDefenseNumbersLowHandler(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove, *newMove;
     AlternativeShips alternatives;
@@ -385,7 +385,7 @@ void aihFastDefenseNumbersLowHandler(AITeam *team)
     Outputs     :
     Return      : void
 ----------------------------------------------------------------------------*/
-void aihSlowDefenseNumbersLowHandler(AITeam *team)
+void aihSlowDefenseNumbersLowHandler(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove, *newMove;
     AlternativeShips alternatives;
@@ -534,7 +534,7 @@ void aihPatrolEnemyNearbyHandler(struct AITeam *team, SelectCommand *ships)
     Outputs     : Turns on the special ability of the gravwell generator
     Return      : void
 ----------------------------------------------------------------------------*/
-void aihGravWellEnemyNearbyHandler(AITeam *team, SelectCommand *ships)
+void aihGravWellEnemyNearbyHandler(struct AITeam *team, SelectCommand *ships)
 {
     AITeamMove *thisMove = team->curMove, *newMove;
     udword i, numEnemyFighters = 0, numEnemyCorvettes = 0;
@@ -605,7 +605,7 @@ void aihGravWellEnemyNearbyHandler(AITeam *team, SelectCommand *ships)
     Outputs     : Turns off the special ability of the gravwell generator
     Return      : void
 ----------------------------------------------------------------------------*/
-void aihGravWellEnemyNotNearbyHandler(AITeam *team)
+void aihGravWellEnemyNotNearbyHandler(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove;
 
@@ -627,7 +627,7 @@ void aihGravWellEnemyNotNearbyHandler(AITeam *team)
     Outputs     : Creates new moves to deal with the poopyhead attacking the defensless ship
     Return      : void
 ----------------------------------------------------------------------------*/
-void aihFastDefenseDistressHandler(struct AITeam *team, udword *intvar)
+void aihFastDefenseDistressHandler( struct AITeam *team, udword *intvar)
 {
     AITeamMove *newMove, *thisMove = team->curMove;
     SelectCommand *HandlerShips = (SelectCommand *)(*intvar);
@@ -713,7 +713,7 @@ void aihFastDefenseDistressHandler(struct AITeam *team, udword *intvar)
     Outputs     : Creates new moves to deal with the poopyhead attacking the defensless ship
     Return      : void
 ----------------------------------------------------------------------------*/
-void aihSlowDefenseDistressHandler(struct AITeam *team, udword *intvar)
+void aihSlowDefenseDistressHandler( struct AITeam *team, udword *intvar)
 {
     AITeamMove *newMove, *thisMove = team->curMove;
     SelectCommand *HandlerShips = (SelectCommand *)(*intvar);

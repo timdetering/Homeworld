@@ -753,7 +753,7 @@ void aifTeamRequestsShipsCB(ShipType shiptype,sdword number,struct AITeam *team,
     }
 }
 
-void RemoveTeamFromTeamWaitingQ(LinkedList *TeamWaitingQ,AITeam *team)
+void RemoveTeamFromTeamWaitingQ(LinkedList *TeamWaitingQ, struct AITeam *team)
 {
     Node *node = TeamWaitingQ->head;
     Node *nextnode;
@@ -1130,7 +1130,7 @@ void aifAssignNewShips(void)
     Outputs     : Whatever's needed to initialize hyperspacing
     Return      : void
 ----------------------------------------------------------------------------*/
-void aifHyperspaceInit(AIPlayer *aiplayer)
+void aifHyperspaceInit(struct AIPlayer *aiplayer)
 {
     //determine what percentage of RUs to skim for hyperspacing
     //for now, just take off 8%
@@ -1197,7 +1197,7 @@ extern udword AIPLAYER_BIGOTRY[];
 void aifFindAllies(void)
 {
     udword i;
-    AIPlayer *OtherCPU;
+    struct AIPlayer *OtherCPU;
     udword HowMuchDoILoveMyFriends;
 
     HowMuchDoILoveMyFriends = randyrandom(RAN_AIPlayer, 100);

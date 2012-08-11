@@ -7,7 +7,8 @@
 =============================================================================*/
 
 #ifndef SW_Render
-#include <windows.h>
+//#include <windows.h>
+#include <PrecompiledHeader.h>
 #endif
 #include "types.h"
 #include "vector.h"

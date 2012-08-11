@@ -11,7 +11,7 @@
 #endif
 #include <stdio.h>
 #include <string.h>
-#include <math.h>
+//#include <math.h>
 #include "types.h"
 #include "memory.h"
 #include "clouds.h"

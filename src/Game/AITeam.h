@@ -377,7 +377,7 @@ typedef enum {
     NumTeamType
 } TeamType;
 
-typedef struct AITeam {
+struct AITeam {
     TeamType          teamType;
     udword            teamFlags;
     udword            TeamFeatures;
@@ -407,15 +407,15 @@ typedef struct AITeam {
     sdword              kasOrigShipsCount; // original size of team (in mission layout file)
     TacticsType         kasTactics;  // current tactics setting, passed to certain moves
     TypeOfFormation     kasFormation; // current formation setting, passed to certain moves
-} AITeam;
+};
 
 // all move processing functions look like this:
 // (returning 1 when we this move has completed
 //  and any required waiting is finished, 0 otherwise)
-typedef sdword (*aimProcessFunction) (AITeam *team);
-typedef void (*aimShipDied) (AITeam *team, struct AITeamMove *move, Ship *ship);
-typedef void (*aimCloseFunction) (AITeam *team, struct AITeamMove *move);
-typedef void (*aimResourceDied) (AITeam *team, struct AITeamMove *move, Resource *resource);
+typedef sdword (*aimProcessFunction) (struct AITeam *team);
+typedef void (*aimShipDied) (struct AITeam *team, struct AITeamMove *move, Ship *ship);
+typedef void (*aimCloseFunction) (struct AITeam *team, struct AITeamMove *move);
+typedef void (*aimResourceDied) (struct AITeam *team, struct AITeamMove *move, Resource *resource);
 
 typedef struct AITeamMove {
     Node listNode;
@@ -518,8 +518,8 @@ void aitClose(struct AIPlayer *aiplayer);
 /*-----------------------------------------------------------------------------
     General Utility Functions:
 -----------------------------------------------------------------------------*/
-void aitAddmoveBeforeAndMakeCurrent(AITeam *team, AITeamMove *newMove, AITeamMove *thisMove);
-void aitAddmoveBeforeAndMakeCurrentNoSpecial(AITeam *team, AITeamMove *newMove, AITeamMove *thisMove);
+void aitAddmoveBeforeAndMakeCurrent(struct AITeam *team, AITeamMove *newMove, AITeamMove *thisMove);
+void aitAddmoveBeforeAndMakeCurrentNoSpecial(struct AITeam *team, AITeamMove *newMove, AITeamMove *thisMove);
 
 /*-----------------------------------------------------------------------------
     Team State Query Functions:
@@ -527,61 +527,61 @@ void aitAddmoveBeforeAndMakeCurrentNoSpecial(AITeam *team, AITeamMove *newMove, 
 bool aitAnyTeamOfPlayerAttackingThisShip(struct AIPlayer *aiplayer,Ship *ship);
 
 udword aitFindNumTeamsWithFlag(udword flag);
-AITeam *aitFindNextTeamWithFlag(AITeam *team, udword flag);
+struct AITeam *aitFindNextTeamWithFlag(struct AITeam *team, udword flag);
 
 sdword aitCountTeamsWaitingForShips(TeamType type);
 
 //team status functions
-bool aitTeamIsDone(AITeam *team);
-bool aitTeamIsIdle(AITeam *team);
-bool aitTeamIsGuarding(AITeam *team);
-bool aitTeamIsAttacking(AITeam *team);
-bool aitTeamIsntDefendingMothership(AITeam *team, SelectCommand *enemyships);
-bool aitTeamIsFinishedMoving(AITeam *team, vector destination, real32 range);
-bool aitTeamIsDoingSpecialOp(AITeam *team);
-bool aitCheckIfOtherDefTeamAnsweringSignalNeedsHelp(AITeam *team, SelectCommand *ships);
-bool aitTeamIsInRange(AITeam *team, ShipPtr ship, real32 time);
-bool aitTeamIsInMothershipRange(AITeam *team);
+bool aitTeamIsDone(struct AITeam *team);
+bool aitTeamIsIdle(struct AITeam *team);
+bool aitTeamIsGuarding(struct AITeam *team);
+bool aitTeamIsAttacking(struct AITeam *team);
+bool aitTeamIsntDefendingMothership(struct AITeam *team, SelectCommand *enemyships);
+bool aitTeamIsFinishedMoving(struct AITeam *team, vector destination, real32 range);
+bool aitTeamIsDoingSpecialOp(struct AITeam *team);
+bool aitCheckIfOtherDefTeamAnsweringSignalNeedsHelp(struct AITeam *team, SelectCommand *ships);
+bool aitTeamIsInRange(struct AITeam *team, ShipPtr ship, real32 time);
+bool aitTeamIsInMothershipRange(struct AITeam *team);
 
-void aitRecallGuardTeam(AITeam *team);
+void aitRecallGuardTeam(struct AITeam *team);
 bool aitNeedStrikeSupport(udword minstr);
 
 //set team attributes
-void aitMakeTeamSupportShips(AITeam *team, SelectCommand *ships);
-void aitSetTeamHomoHetero(AITeam *team);
-void aitSetTeamSpecialFlags(AITeam *team);
-bool aitTeamHomogenous(AITeam *team);
-void aitSetTeamStrengthValue(AITeam *team);
-ubyte aitSetTeamDifficultyLevel(AITeam *team, udword playerDL, udword teamDL);
+void aitMakeTeamSupportShips(struct AITeam *team, SelectCommand *ships);
+void aitSetTeamHomoHetero(struct AITeam *team);
+void aitSetTeamSpecialFlags(struct AITeam *team);
+bool aitTeamHomogenous(struct AITeam *team);
+void aitSetTeamStrengthValue(struct AITeam *team);
+ubyte aitSetTeamDifficultyLevel(struct AITeam *team, udword playerDL, udword teamDL);
 
-AITeam *aitFindMostValuable(udword valueness);
+struct AITeam *aitFindMostValuable(udword valueness);
 
-AITeam *aitFindGoodCoopTeam(ShipType type);
+struct AITeam *aitFindGoodCoopTeam(ShipType type);
 
-AITeam *aitCreate(TeamType teamType);
-void aitDestroy(struct AIPlayer *aiplayer, AITeam *team, bool removeAllReferencesToTeam);
+struct AITeam *aitCreate(TeamType teamType);
+void aitDestroy(struct AIPlayer *aiplayer, struct AITeam *team, bool removeAllReferencesToTeam);
 
-void aitDeleteCurrentMove(AITeam *team);
-void aitDeleteMovesUntilMoveType(AITeam *team, AIMoveTypes type);
-void aitDeleteAllTeamMoves(AITeam *team);
+void aitDeleteCurrentMove(struct AITeam *team);
+void aitDeleteMovesUntilMoveType(struct AITeam *team, AIMoveTypes type);
+void aitDeleteAllTeamMoves(struct AITeam *team);
 
-void aitAddShip(AITeam *team, ShipPtr ship);
+void aitAddShip(struct AITeam *team, ShipPtr ship);
 
 //swarm specific code
-void aitMoveSwarmShipDefenseToAttack(AITeam *attackSwarm, AITeam *defenseSwarm, ShipPtr ship);
-void aitMoveAllSwarmShipsDefenseToAttack(AITeam *defenseSwarm, AITeam *attackSwarm);
-void aitMoveAllSwarmShipsAttackToDefense(AITeam *attackSwarm, AITeam *defenseSwarm);
-void aitMoveAllSwarmShipsDefense(AITeam *destTeam, AITeam *sourceTeam);
-void aitMoveAllSwarmShipsAttack(AITeam *destTeam, AITeam *sourceTeam);
-AITeam *aitFindNewPod(AITeam *defenseTeam);
-void aitMoveSwarmersToNewPod(AITeam *defenseTeam, AITeam *podTeam);
+void aitMoveSwarmShipDefenseToAttack(struct AITeam *attackSwarm, struct AITeam *defenseSwarm, ShipPtr ship);
+void aitMoveAllSwarmShipsDefenseToAttack(struct AITeam *defenseSwarm, struct AITeam *attackSwarm);
+void aitMoveAllSwarmShipsAttackToDefense(struct AITeam *attackSwarm, struct AITeam *defenseSwarm);
+void aitMoveAllSwarmShipsDefense(struct AITeam *destTeam, struct AITeam *sourceTeam);
+void aitMoveAllSwarmShipsAttack(struct AITeam *destTeam, struct AITeam *sourceTeam);
+struct AITeam *aitFindNewPod(struct AITeam *defenseTeam);
+void aitMoveSwarmersToNewPod(struct AITeam *defenseTeam, struct AITeam *podTeam);
 bool aitAllDefenseSwarmersFull(void);
 
-void aitSpecialDefenseCoopTeamDiedCB(AITeam *team);
-void GenericCooperatingTeamDiedCB(AITeam *team);
+void aitSpecialDefenseCoopTeamDiedCB(struct AITeam *team);
+void GenericCooperatingTeamDiedCB(struct AITeam *team);
 
 // returns TRUE if removed ship
-bool aitRemoveShip(AITeam *team, ShipPtr ship);
+bool aitRemoveShip(struct AITeam *team, ShipPtr ship);
 
 //process current move for each team
 void aitExecute(void);
@@ -590,15 +590,15 @@ void aitExecute(void);
 void aitShipDied(struct AIPlayer *aiplayer,ShipPtr ship);
 void aitResourceDied(struct AIPlayer *aiplayer, Resource *resource);
 
-bool aitCheckForLeaderAndMoveToFront(AITeam *team);
+bool aitCheckForLeaderAndMoveToFront(struct AITeam *team);
 
-bool aitCheckAmIBeingWatched(AITeam *team, SelectCommand *sel);
-void aitSetAmIBeingWatched(AITeam *team, SelectCommand *sel);
+bool aitCheckAmIBeingWatchedstruct (struct AITeam *team, SelectCommand *sel);
+void aitSetAmIBeingWatched(struct AITeam *team, SelectCommand *sel);
 
 
-sdword aitMsgReceived(AITeam *teamp, char *msg);
-void aitMsgSend(AITeam *fromTeamp, AITeam *teamp, char *msg);
-void aitMsgQueueFree(AITeam *teamp);
+sdword aitMsgReceived(struct AITeam *teamp, char *msg);
+void aitMsgSend(struct AITeam *fromTeamp, struct AITeam *teamp, char *msg);
+void aitMsgQueueFree(struct AITeam *teamp);
 
 void aitSave(struct AIPlayer *aiplayer);
 void aitLoad(struct AIPlayer *aiplayer);
@@ -614,6 +614,6 @@ void aitFix(struct AIPlayer *aiplayer);
     Globals:
 =============================================================================*/
 
-extern AITeam *savingThisAITeam;
+extern struct AITeam *savingThisAITeam;
 
 #endif

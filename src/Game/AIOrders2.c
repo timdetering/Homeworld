@@ -5,6 +5,9 @@
 #include "AIPlayer.h"
 #include "AIUtilities.h"
 #include "CommandLayer.h"
+#include "AITeam.h"
+#include "AIEvents.h"
+#include "AIHandler.h"
 
 void aioCreateTakeoutMothershipFast(struct AITeam *team,Ship *mothership)
 {
@@ -109,7 +112,7 @@ void aioCreateTakeoutMothershipHuge(struct AITeam *team,Ship *mothership)
 {
     AlternativeShips guardalternatives;
     AlternativeShips alternatives;
-    AITeam *secondaryteam;
+    struct AITeam *secondaryteam;
 //    SelectCommand *selectone;
     AIVar *Var0;
     AIVar *Var1;
@@ -179,7 +182,7 @@ void aioCreateTakeoutMothershipGuard(struct AITeam *team,Ship *mothership)
 {
     AlternativeShips alternatives;
     AlternativeShips guardalternatives;
-    AITeam *secondaryteam;
+    struct AITeam *secondaryteam;
 //    SelectCommand *selectone;
     AIVar *Var0;
     AIVar *Var1;
@@ -421,7 +424,7 @@ void aioCreateFancyTakeoutTarget(struct AITeam *team,Ship *target)
     sdword numShipsToBuy;
     SelectCommand *selectone;
     bool goodEnough;
-    AITeam *secondaryteam;
+    struct AITeam *secondaryteam;
     SelectCommand *nearbydangerousships;
     AITeamMove *move;
 

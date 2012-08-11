@@ -43,7 +43,7 @@
 #include "glinc.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
+//#include <math.h>
 #include <float.h>
 #include "debug.h"
 #include "switches.h"

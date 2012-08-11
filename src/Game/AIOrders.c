@@ -24,7 +24,7 @@
     Outputs     : Creates a whole bunch of orders
     Return      : void
 ----------------------------------------------------------------------------*/
-void aioCreateGuardShips(AITeam *team, SelectCommand *ships)
+void aioCreateGuardShips(struct AITeam *team, SelectCommand *ships)
 {
     AlternativeShips alternatives;
     sbyte numShipsToUse;
@@ -87,7 +87,7 @@ void aioCreateGuardShips(AITeam *team, SelectCommand *ships)
     Outputs     : Creates a whole bunch of moves for the team
     Return      : void
 ----------------------------------------------------------------------------*/
-void aioCreateReconaissance(AITeam *team, ReconType type)
+void aioCreateReconaissance(struct AITeam *team, ReconType type)
 {
     vector destination, origin = ORIGIN_VECTOR;
     AlternativeShips alternatives;
@@ -153,7 +153,7 @@ void aioCreateReconaissance(AITeam *team, ReconType type)
     Outputs     : Creates a whole bunch of moves for the team
     Return      : void
 ----------------------------------------------------------------------------*/
-void aioCreateHarass(AITeam *team)
+void aioCreateHarass(struct AITeam *team)
 {
     vector destination, origin = ORIGIN_VECTOR;
     AlternativeShips alternatives;
@@ -201,7 +201,7 @@ void aioCreateHarass(AITeam *team)
     Outputs     : Creates a whole bunch of moves for the team
     Return      : void
 ----------------------------------------------------------------------------*/
-void aioCreateReconHarass(AITeam *team)
+void aioCreateReconHarass(struct AITeam *team)
 {
     vector destination, origin = {0,0,0};
     AITeamMove *move;
@@ -250,7 +250,7 @@ void aioCreateReconHarass(AITeam *team)
     Outputs     : Creates a few moves
     Return      : void
 ----------------------------------------------------------------------------*/
-void aioCreateDefendMothership(AITeam *team)
+void aioCreateDefendMothership(struct AITeam *team)
 {
     AITeamMove *move;
 
@@ -274,7 +274,7 @@ void aioCreateDefendMothership(AITeam *team)
 ----------------------------------------------------------------------------*/
 //note: this function isn't really used.
 //      instead, use fast roving or slow roving defense
-void aioCreatePatrol(AITeam *team, Path *path)
+void aioCreatePatrol(struct AITeam *team, Path *path)
 {
     AITeamMove *move;
 
@@ -298,7 +298,7 @@ void aioCreatePatrol(AITeam *team, Path *path)
     Outputs     : Creates a bunch of moves
     Return      : void
 ----------------------------------------------------------------------------*/
-void aioCreateFastRovingDefense(AITeam *team)
+void aioCreateFastRovingDefense(struct AITeam *team)
 {
     AlternativeShips alternatives;
     AITeamMove *move;
@@ -334,7 +334,7 @@ void aioCreateFastRovingDefense(AITeam *team)
     Outputs     : Creates a bunch of moves
     Return      : void
 ----------------------------------------------------------------------------*/
-void aioCreateSlowRovingDefense(AITeam *team)
+void aioCreateSlowRovingDefense(struct AITeam *team)
 {
     AlternativeShips alternatives;
     AITeamMove *move;
@@ -377,7 +377,7 @@ void aioCreateSlowRovingDefense(AITeam *team)
     Outputs     : Creates a bunch of moves
     Return      : void
 ----------------------------------------------------------------------------*/
-void aioCreateReinforcements(AITeam *team, AITeam *reinforceteam, ShipType shiptype,
+void aioCreateReinforcements(struct AITeam *team, struct AITeam *reinforceteam, ShipType shiptype,
                              sbyte num, AlternativeShips *alternatives, sdword priority)
 {
     aiplayerLog((aiIndex, "%x Issuing Reinforcements Order", team));
@@ -408,7 +408,7 @@ void aioCreateReinforcements(AITeam *team, AITeam *reinforceteam, ShipType shipt
     Outputs     : Creates a whole whack of moves
     Return      : void
 ----------------------------------------------------------------------------*/
-void aioCreateActiveSupport(AITeam *team, SelectCommand *ships, SupportType type)
+void aioCreateActiveSupport(struct AITeam *team, SelectCommand *ships, SupportType type)
 {
     AlternativeShips alternatives;
 
@@ -459,7 +459,7 @@ void aioCreateActiveSupport(AITeam *team, SelectCommand *ships, SupportType type
     Outputs     : Creates a bunch'a moves
     Return      : void
 ----------------------------------------------------------------------------*/
-void aioCreateFighterStrike(AITeam *team)
+void aioCreateFighterStrike(struct AITeam *team)
 {
     AlternativeShips alternatives;
     AITeamMove *newmove;
@@ -503,7 +503,7 @@ void aioCreateFighterStrike(AITeam *team)
     Outputs     : Creates a bunch'a moves
     Return      : void
 ----------------------------------------------------------------------------*/
-void aioCreateCorvetteStrike(AITeam *team)
+void aioCreateCorvetteStrike(struct AITeam *team)
 {
     AlternativeShips alternatives;
     AITeamMove *newmove;
@@ -545,7 +545,7 @@ void aioCreateCorvetteStrike(AITeam *team)
     Outputs     : Creates a bunch'a moves
     Return      : void
 ----------------------------------------------------------------------------*/
-void aioCreateFrigateStrike(AITeam *team)
+void aioCreateFrigateStrike(struct AITeam *team)
 {
     AlternativeShips alternatives;
     AITeamMove *newmove;
@@ -583,7 +583,7 @@ void aioCreateFrigateStrike(AITeam *team)
     Outputs     : Creates sum moooooves
     Return      : void
 ----------------------------------------------------------------------------*/
-void aioCreateResourcer(AITeam *team)
+void aioCreateResourcer(struct AITeam *team)
 {
     aiplayerLog((aiIndex, "%x Issuing Resourcer Order", team));
 
@@ -600,7 +600,7 @@ void aioCreateResourcer(AITeam *team)
     Outputs     : Creates some new moves
     Return      : void
 ----------------------------------------------------------------------------*/
-void aioCreateCapture(AITeam *team)
+void aioCreateCapture(struct AITeam *team)
 {
     aiplayerLog((aiIndex, "%x Issuing Capture Order", team));
 
@@ -618,7 +618,7 @@ void aioCreateCapture(AITeam *team)
     Outputs     : Creates some new moves
     Return      : void
 ----------------------------------------------------------------------------*/
-void aioCreateMine(AITeam *team)
+void aioCreateMine(struct AITeam *team)
 {
     aiplayerLog((aiIndex, "%x Issuing Mine Order", team));
 
@@ -636,7 +636,7 @@ void aioCreateMine(AITeam *team)
     Outputs     : Creates some new moves
     Return      : void
 ----------------------------------------------------------------------------*/
-void aioCreateSpecialDefense(AITeam *team, ShipType type)
+void aioCreateSpecialDefense(struct AITeam *team, ShipType type)
 {
     AITeamMove *move;
     ShipStaticInfo *gravstatics;
@@ -675,7 +675,7 @@ void aioCreateSpecialDefense(AITeam *team, ShipType type)
     Outputs     : Creates a bunch of moves
     Return      : void
 ----------------------------------------------------------------------------*/
-void aioCreateSwarmAttack(AITeam *team)
+void aioCreateSwarmAttack(struct AITeam *team)
 {
     AITeamMove *newmove;
 
@@ -694,7 +694,7 @@ void aioCreateSwarmAttack(AITeam *team)
     Outputs     : Creates a bunch of moves
     Return      : void
 ----------------------------------------------------------------------------*/
-void aioCreateSwarmDefense(AITeam *team, SelectCommand *Pod)
+void aioCreateSwarmDefense(struct AITeam *team, SelectCommand *Pod)
 {
     AITeamMove *newmove;
 
@@ -714,7 +714,7 @@ void aioCreateSwarmDefense(AITeam *team, SelectCommand *Pod)
     Outputs     : Creates a bunch of moves
     Return      : void
 ----------------------------------------------------------------------------*/
-void aioCreateSwarmSupport(AITeam *team)
+void aioCreateSwarmSupport(struct AITeam *team)
 {
     aiplayerLog((aiIndex, "Issuing Swarm Support Order"));
 
@@ -731,7 +731,7 @@ void aioCreateSwarmSupport(AITeam *team)
     Outputs     : Creates a bunch'a moves
     Return      : void
 ----------------------------------------------------------------------------*/
-void aioCreateMultiBeamAttack(AITeam *team)
+void aioCreateMultiBeamAttack(struct AITeam *team)
 {
     SelectCommand *enemy;
 
@@ -751,7 +751,7 @@ void aioCreateMultiBeamAttack(AITeam *team)
     Outputs     : Creates a bunch'a moves
     Return      : void
 ----------------------------------------------------------------------------*/
-void aioCreateP2MothershipAttack(AITeam *team)
+void aioCreateP2MothershipAttack(struct AITeam *team)
 {
     SelectCommand *enemy;
 

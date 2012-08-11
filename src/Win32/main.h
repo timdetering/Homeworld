@@ -7,6 +7,11 @@
 #ifndef ___MAIN_H
 #define ___MAIN_H
 
+//#define WIN32_LEAN_AND_MEAN
+//#include <windows.h>
+//#include <winreg.h>
+#include "PrecompiledHeader.h"
+
 #include "types.h"
 #include "mainswitches.h"
 
@@ -64,7 +69,7 @@ commandoption;
     Data:
 =============================================================================*/
 extern void *ghMainWindow;
-extern void *ghInstance;
+extern HINSTANCE ghInstance;
 #if MAIN_SENSOR_LEVEL
 udword initialSensorLevel;
 #endif

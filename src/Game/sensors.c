@@ -8,7 +8,7 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <math.h>
+//#include <math.h>
 #include <float.h>
 #include <stdio.h>
 #include <stdlib.h>

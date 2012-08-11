@@ -10,7 +10,7 @@
 //#define DEBUG_ATTACK
 
 #include <string.h>
-#include <math.h>
+//#include <math.h>
 #include <stdlib.h>
 #include "types.h"
 #include "debug.h"

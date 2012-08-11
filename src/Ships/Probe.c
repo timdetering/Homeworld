@@ -6,7 +6,7 @@
     Copyright Relic Entertainment, Inc.  All rights reserved.
 =============================================================================*/
 #include <windows.h>
-#include <math.h>
+//#include <math.h>
 #include "types.h"
 #include "spaceobj.h"
 #include "aitrack.h"

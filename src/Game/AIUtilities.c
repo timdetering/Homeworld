@@ -7,7 +7,7 @@
 =============================================================================*/
 
 
-#include <math.h>
+//#include <math.h>
 #include <string.h>
 #include "AIPlayer.h"
 #include "AIUtilities.h"
@@ -2352,7 +2352,7 @@ SelectCommand *aiuFindCaptureTarget(SelectCommand *capturingShips)
     Outputs     :
     Return      : the ship(s) to attack
 ----------------------------------------------------------------------------*/
-SelectCommand *aiuFindSwarmerTarget(AITeam *team)
+SelectCommand *aiuFindSwarmerTarget(struct AITeam *team)
 {
     ShipPtr target = NULL, enemyMothership = NULL;
     SelectCommand *swarm_targets;
@@ -3409,7 +3409,7 @@ bool aiuShipsInGunRangeOfTargets(SelectCommand *selection)
     Outputs     : modifies shiptotal, classtotal and typetotal
     Return      : void
 ----------------------------------------------------------------------------*/
-void aiuCheckRequestQueue(AIPlayer *aiplayer, Node *node,
+void aiuCheckRequestQueue(struct AIPlayer *aiplayer, Node *node,
                           ShipClass shipclass, ShipType shiptype,
                           sdword *shiptotal, sdword *classtotal, sdword *typetotal)
 {
@@ -3452,7 +3452,7 @@ extern sdword cdMaxShipsAllowed;
 extern sdword cdLimitCaps[TOTAL_NUM_SHIPS];
 extern sdword cdClassCaps[NUM_CLASSES];
 extern bool   cdEnabled;
-udword aiuUnitCapCanBuildShip(AIPlayer *aiplayer, ShipType shiptype, sdword numShips)
+udword aiuUnitCapCanBuildShip(struct AIPlayer *aiplayer, ShipType shiptype, sdword numShips)
 {
     sdword shiptotal = 0, classtotal = 0, typetotal = 0, shipcount = 0;
     udword i;
@@ -3936,7 +3936,7 @@ void aiuSetAttackHeterogenous(SelectCommand *attackers, SelectCommand *targets)
     Outputs     : Makes ships attack other ships
     Return      : Selection of ships that have become targets
 ----------------------------------------------------------------------------*/
-SelectCommand *aiuAttack(AITeam *team, SelectCommand *targets)
+SelectCommand *aiuAttack(struct AITeam *team, SelectCommand *targets)
 {
     MaxSelection Attackers;
     SelectCommand *nonAttackers;
@@ -4339,7 +4339,7 @@ blob *aiuWrapGetCollBlob(SelectCommand *ships)
     Outputs     : Changes a few ship selections and stuff
     Return      : void
 ----------------------------------------------------------------------------*/
-void aiuChangePrimaryEnemy(AIPlayer *aiplayer)
+void aiuChangePrimaryEnemy(struct AIPlayer *aiplayer)
 {
     //assumes that the new primary enemy player has been chosen
     Player *primaryEnemy = aiplayer->primaryEnemyPlayer;
@@ -4434,7 +4434,7 @@ udword aiuGetNumEnemyBlobs(void)
     Outputs     :
     Return      : void
 ----------------------------------------------------------------------------*/
-void aiuUpdateKnowledgeOfEnemyShips(AIPlayer *aiplayer)
+void aiuUpdateKnowledgeOfEnemyShips(struct AIPlayer *aiplayer)
 {
     Ship *ship;
     udword i, j;

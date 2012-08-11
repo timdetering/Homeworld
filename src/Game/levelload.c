@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <math.h>
+//#include <math.h>
 #include <ctype.h>
 #include "types.h"
 #include "memory.h"
@@ -942,7 +942,7 @@ static void scriptSetShipsCB(char *directory,char *field,void *dataToFillIn)
     Player *player = &universe.players[missionSphereInfo->playerNumber];
     bool paradeFormation = FALSE;
     bool useAsMothership = FALSE;
-    AITeam *teamp = NULL;
+    struct AITeam *teamp = NULL;
     udword fieldStart;
     sdword colorScheme = -1;
     udword attributes = 0;

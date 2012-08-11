@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <math.h>
-#include "bink.h"
+//#include <math.h>
+//#include "bink.h"
 #include "types.h"
 #include "vector.h"
 #include "linkedlist.h"
@@ -2474,10 +2474,10 @@ void singlePlayerGameUpdate()
                 }
                 else
                 {
-                    if (!binkDonePlaying)
-                    {
-                        break;
-                    }
+                    //if (!binkDonePlaying)
+                    //{
+                    //    break;
+                    //}
 
                     // clear damage effects from ships
                     CleanupDamageEffects();

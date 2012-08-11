@@ -23,12 +23,12 @@
 =============================================================================*/
 
 // select ships
-typedef struct
-{
-    sdword numShips;
-    real32 timeLastStatus;
-    ShipPtr ShipPtr[1];
-} SelectCommand;
+//typedef struct
+//{
+//    sdword numShips;
+//    real32 timeLastStatus;
+//    ShipPtr ShipPtr[1];
+//} SelectCommand;
 
 typedef struct
 {

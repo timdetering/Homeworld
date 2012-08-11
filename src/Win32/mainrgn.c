@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "glinc.h"
-#include <math.h>
+//#include <math.h>
 #include <float.h>
 #include "switches.h"
 #include "types.h"

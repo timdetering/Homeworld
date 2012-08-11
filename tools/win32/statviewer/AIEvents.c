@@ -322,7 +322,7 @@ void aieHandlerSetInterrupt (AITeamMove *move, udword *intvar, udword interval, 
 //  return true iff someone in the team is getting rocked.
 //  NOTE: this will allocate memory for ships iff true.
 //
-sdword aieCheckGettingRocked(AITeam *team, SelectCommand **ships)
+sdword aieCheckGettingRocked(struct AITeam *team, SelectCommand **ships)
 {
     sdword i;
     SelectCommand *selection = team->shipList.selection;
@@ -346,7 +346,7 @@ sdword aieCheckGettingRocked(AITeam *team, SelectCommand **ships)
 //  the given team's ships.
 //  NOTE: this will allocate memory for ships iff true.
 //
-sdword aieCheckEnemyNearby(AITeam *team, SelectCommand **ships)
+sdword aieCheckEnemyNearby(struct AITeam *team, SelectCommand **ships)
 {
 //    blob *myblob;
 
@@ -386,7 +386,7 @@ sdword aieCheckEnemyNearby(AITeam *team, SelectCommand **ships)
 //  return true iff there are no enemy ships within a certain radius of any of
 //  the given team's ships.
 //
-sdword aieCheckEnemyNotNearby(AITeam *team)
+sdword aieCheckEnemyNotNearby(struct AITeam *team)
 {
 //    blob *myblob;
     SelectCommand *ships;
@@ -423,7 +423,7 @@ sdword aieCheckEnemyNotNearby(AITeam *team)
 // return true iff one of the ships is firing (indicated by the shipisattacking
 // boolean variable
 //
-sdword aieCheckFiring(AITeam *team)
+sdword aieCheckFiring(struct AITeam *team)
 {
     sdword i;
     SelectCommand *selection = team->shipList.selection;
@@ -443,7 +443,7 @@ sdword aieCheckFiring(AITeam *team)
 // returns true iff all the ships stop firing (indicated by the shipisattacking
 // boolean variable
 //
-sdword aieCheckDisengage(AITeam *team)
+sdword aieCheckDisengage(struct AITeam *team)
 {
     sdword i;
     SelectCommand *selection = team->shipList.selection;
@@ -462,7 +462,7 @@ sdword aieCheckDisengage(AITeam *team)
 //  return true iff the entire group (or one individual, if specified)
 //  is below a certain level of health
 //
-sdword aieCheckHealthLow(AITeam *team)
+sdword aieCheckHealthLow(struct AITeam *team)
 {
     sdword i;
     real32 maxHealth = 0.0;
@@ -496,7 +496,7 @@ sdword aieCheckHealthLow(AITeam *team)
 //  return true iff the entire group (or one individual, if specified)
 //  is above a certain level of health
 //
-sdword aieCheckHealthHigh(AITeam *team)
+sdword aieCheckHealthHigh(struct AITeam *team)
 {
     sdword i;
     real32 maxHealth = 0;
@@ -530,7 +530,7 @@ sdword aieCheckHealthHigh(AITeam *team)
 //  return true iff the size of the team is below a certain number of ships
 //  (expressed as a % of original team size)
 //
-sdword aieCheckNumbersLow(AITeam *team)
+sdword aieCheckNumbersLow(struct AITeam *team)
 {
     if (!team->curMove->events.numbersLow.watchBaseCount)
     {
@@ -546,7 +546,7 @@ sdword aieCheckNumbersLow(AITeam *team)
 //  return true iff the size of the team is above a certain number of ships
 //  (expressed as a % of original team size)
 //
-sdword aieCheckNumbersHigh(AITeam *team)
+sdword aieCheckNumbersHigh(struct AITeam *team)
 {
     if (!team->curMove->events.numbersHigh.watchBaseCount)
     {
@@ -562,7 +562,7 @@ sdword aieCheckNumbersHigh(AITeam *team)
 //  return true iff the entire group (or one individual, if specified)
 //  is below a certain level of fuel
 //
-sdword aieCheckFuelLow(AITeam *team)
+sdword aieCheckFuelLow(struct AITeam *team)
 {
     sdword i;
     real32 maxFuel = 0.0;
@@ -596,7 +596,7 @@ sdword aieCheckFuelLow(AITeam *team)
 //  return true iff the entire group (or one individual, if specified)
 //  is below a certain level of fuel
 //
-sdword aieCheckFuelHigh(AITeam *team)
+sdword aieCheckFuelHigh(struct AITeam *team)
 {
     sdword i;
     real32 maxFuel = 0.0;
@@ -626,12 +626,12 @@ sdword aieCheckFuelHigh(AITeam *team)
     return FALSE;
 }
 
-sdword aieCheckShipDied(AITeam *team, ShipPtr *ship)
+sdword aieCheckShipDied(struct AITeam *team, ShipPtr *ship)
 {
     return FALSE;
 }
 
-sdword aieCheckTeamDied(AITeam *team)
+sdword aieCheckTeamDied(struct AITeam *team)
 {
     if (team->shipList.selection->numShips)
     {
@@ -640,7 +640,7 @@ sdword aieCheckTeamDied(AITeam *team)
     return TRUE;
 }
 
-sdword aieCheckInterrupt(AITeam *team)
+sdword aieCheckInterrupt(struct AITeam *team)
 {
     if (*(team->curMove->events.interrupt.intvar))
     {
@@ -662,7 +662,7 @@ void aiePreFixAIEvents(struct AITeamMove *move)
         // convert pointer to offset into AIPlayer structure
         dbgAssert(move->events.interrupt.intvar);
         move->events.interrupt.intvar = ((ubyte *)move->events.interrupt.intvar) - ((ubyte *)fixingThisAIPlayer);
-        dbgAssert(move->events.interrupt.intvar < sizeof(AIPlayer));
+        dbgAssert(move->events.interrupt.intvar < sizeof(struct AIPlayer));
     }
 
     move->events.gettingRocked.handler  = aieHandlerToNum((aieHandlerSimple)move->events.gettingRocked.handler);
@@ -700,7 +700,7 @@ void aieFixAIEvents(struct AITeamMove *move)
 
     if (move->events.interrupt.handler)
     {
-        dbgAssert(move->events.interrupt.intvar < sizeof(AIPlayer));
+        dbgAssert(move->events.interrupt.intvar < sizeof(struct AIPlayer));
         move->events.interrupt.intvar = (udword *)( ((ubyte *)fixingThisAIPlayer) + ((sdword)move->events.interrupt.intvar) );
     }
 }

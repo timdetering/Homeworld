@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="Homeworld"
+	OutputDirectory="$(SolutionDir)bin\$(ConfigurationName)"
+	IntermediateDirectory="obj\$(ConfigurationName)"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		CompileAs="1"
+	/>
+</VisualStudioPropertySheet>

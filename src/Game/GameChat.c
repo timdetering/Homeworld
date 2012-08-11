@@ -6,7 +6,8 @@
     Copyright Relic Entertainment, Inc.  All rights reserved.
 =============================================================================*/
 
-#include <windows.h>
+//#include <windows.h>
+#include "PrecompiledHeader.h"
 #include <stdio.h>
 #include "GameChat.h"
 #include "utility.h"

@@ -1,6 +1,9 @@
 #include "univupdate.h"
+#include "AITeam.h"
+#include "AIPlayer.h"
+#include "randy.h"
 
-sdword aimProcessGuardCooperatingTeam(AITeam *team)
+sdword aimProcessGuardCooperatingTeam(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove;
     SelectCommand *selection = team->shipList.selection;
@@ -31,7 +34,7 @@ sdword aimProcessGuardCooperatingTeam(AITeam *team)
     return TRUE;
 }
 
-AITeamMove *aimCreateGuardCooperatingTeamNoAdd(AITeam *team, bool8 wait, bool8 remove)
+AITeamMove *aimCreateGuardCooperatingTeamNoAdd(struct AITeam *team, bool8 wait, bool8 remove)
 {
     TypeOfFormation formation = SAME_FORMATION;
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "guardcoopmove", 0);
@@ -43,7 +46,7 @@ AITeamMove *aimCreateGuardCooperatingTeamNoAdd(AITeam *team, bool8 wait, bool8 r
     return newMove;
 }
 
-AITeamMove *aimCreateGuardCooperatingTeam(AITeam *team, bool8 wait, bool8 remove)
+AITeamMove *aimCreateGuardCooperatingTeam(struct AITeam *team, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = aimCreateGuardCooperatingTeamNoAdd(team, wait, remove);
 
@@ -57,7 +60,7 @@ void aimFix_GuardCoopTeam(AITeamMove *move)
     FixMoveFuncPtrs(move,aimProcessGuardCooperatingTeam,NULL,NULL);
 }
 
-sdword aimProcessLaunch(AITeam *team)
+sdword aimProcessLaunch(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove;
     SelectCommand *selection = team->shipList.selection;
@@ -110,7 +113,7 @@ sdword aimProcessLaunch(AITeam *team)
     return FALSE;
 }
 
-AITeamMove *aimCreateLaunchNoAdd(AITeam *team, bool8 wait, bool8 remove)
+AITeamMove *aimCreateLaunchNoAdd(struct AITeam *team, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "launchmove", 0);
 
@@ -121,7 +124,7 @@ AITeamMove *aimCreateLaunchNoAdd(AITeam *team, bool8 wait, bool8 remove)
     return newMove;
 }
 
-AITeamMove *aimCreateLaunch(AITeam *team, bool8 wait, bool8 remove)
+AITeamMove *aimCreateLaunch(struct AITeam *team, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -137,7 +140,7 @@ void aimFix_Launch(AITeamMove *move)
     FixMoveFuncPtrs(move,aimProcessLaunch,NULL,NULL);
 }
 
-sdword aimProcessFormation(AITeam *team)
+sdword aimProcessFormation(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove;
     SelectCommand *selection = team->shipList.selection;
@@ -170,7 +173,7 @@ sdword aimProcessFormation(AITeam *team)
     return TRUE;
 }
 
-AITeamMove *aimCreateFormationNoAdd(AITeam *team, TypeOfFormation formationtype, bool8 wait, bool8 remove)
+AITeamMove *aimCreateFormationNoAdd(struct AITeam *team, TypeOfFormation formationtype, bool8 wait, bool8 remove)
 {
     TypeOfFormation formation = SAME_FORMATION;
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "formationmove", 0);
@@ -185,7 +188,7 @@ AITeamMove *aimCreateFormationNoAdd(AITeam *team, TypeOfFormation formationtype,
 }
 
 
-AITeamMove *aimCreateFormation(AITeam *team, TypeOfFormation formationtype, bool8 wait, bool8 remove)
+AITeamMove *aimCreateFormation(struct AITeam *team, TypeOfFormation formationtype, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -202,12 +205,12 @@ void aimFix_Formation(AITeamMove *move)
 }
 
 
-sdword aimProcessMoveDone(AITeam *team)
+sdword aimProcessMoveDone(struct AITeam *team)
 {
     return FALSE;
 }
 
-AITeamMove *aimCreateMoveDone(AITeam *team, bool8 wait, bool8 remove)
+AITeamMove *aimCreateMoveDone(struct AITeam *team, bool8 wait, bool8 remove)
 {
     TypeOfFormation formation = SAME_FORMATION;
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "movedone", 0);
@@ -227,7 +230,7 @@ void aimFix_MoveDone(AITeamMove *move)
 }
 
 //generic bandbox attack move
-sdword aimProcessAttack(AITeam *team)
+sdword aimProcessAttack(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove;
     SelectCommand *selection = team->shipList.selection/*, *targets*/;
@@ -273,7 +276,7 @@ sdword aimProcessAttack(AITeam *team)
     }
 }
 
-void aimShipDiedAttack(AITeam *team,AITeamMove *move,Ship *ship)
+void aimShipDiedAttack(struct AITeam *team,AITeamMove *move,Ship *ship)
 {
     SelectCommand *ships = move->params.attack.ships;
     if (ships != NULL)
@@ -286,7 +289,7 @@ void aimShipDiedAttack(AITeam *team,AITeamMove *move,Ship *ship)
     }
 }
 
-void aimCloseAttack(AITeam *team,AITeamMove *move)
+void aimCloseAttack(struct AITeam *team,AITeamMove *move)
 {
     if (move->params.attack.ships != NULL)
     {
@@ -295,7 +298,7 @@ void aimCloseAttack(AITeam *team,AITeamMove *move)
     }
 }
 
-AITeamMove *aimCreateAttackNoAdd(AITeam *team, SelectCommand *targets,TypeOfFormation formation, bool8 wait, bool8 remove)
+AITeamMove *aimCreateAttackNoAdd(struct AITeam *team, SelectCommand *targets,TypeOfFormation formation, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "attackmove", 0);
 
@@ -307,7 +310,7 @@ AITeamMove *aimCreateAttackNoAdd(AITeam *team, SelectCommand *targets,TypeOfForm
     return newMove;
 }
 
-AITeamMove *aimCreateAttack(AITeam *team, SelectCommand *targets,TypeOfFormation formation, bool8 wait, bool8 remove)
+AITeamMove *aimCreateAttack(struct AITeam *team, SelectCommand *targets,TypeOfFormation formation, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -336,7 +339,7 @@ void aimLoad_Attack(AITeamMove *move)
 
 
 //special move
-sdword aimProcessSpecial(AITeam *team)
+sdword aimProcessSpecial(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove;
     SelectCommand *selection = team->shipList.selection;
@@ -381,7 +384,7 @@ sdword aimProcessSpecial(AITeam *team)
     }
 }
 
-void aimSpecialShipDied(AITeam *team,AITeamMove *move,Ship *ship)
+void aimSpecialShipDied(struct AITeam *team,AITeamMove *move,Ship *ship)
 {
     SelectCommand *ships = move->params.attack.ships;
     if (ships != NULL)
@@ -394,12 +397,12 @@ void aimSpecialShipDied(AITeam *team,AITeamMove *move,Ship *ship)
     }
 }
 
-void aimSpecialClose(AITeam *team,AITeamMove *move)
+void aimSpecialClose(struct AITeam *team,AITeamMove *move)
 {
     aiumemFree(move->params.attack.ships);
 }
 
-AITeamMove *aimCreateSpecialNoAdd(AITeam *team, SelectCommand *targets,TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
+AITeamMove *aimCreateSpecialNoAdd(struct AITeam *team, SelectCommand *targets,TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "special", 0);
 
@@ -411,7 +414,7 @@ AITeamMove *aimCreateSpecialNoAdd(AITeam *team, SelectCommand *targets,TypeOfFor
     return newMove;
 }
 
-AITeamMove *aimCreateSpecial(AITeam *team, SelectCommand *targets,TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
+AITeamMove *aimCreateSpecial(struct AITeam *team, SelectCommand *targets,TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -439,7 +442,7 @@ void aimLoad_Special(AITeamMove *move)
 }
 
 
-sdword aimProcessKamikaze(AITeam *team)
+sdword aimProcessKamikaze(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove;
     SelectCommand *selection = team->shipList.selection;
@@ -489,7 +492,7 @@ sdword aimProcessKamikaze(AITeam *team)
     }
 }
 
-void aimShipDiedKamikaze(AITeam *team,AITeamMove *move,Ship *ship)
+void aimShipDiedKamikaze(struct AITeam *team,AITeamMove *move,Ship *ship)
 {
     SelectCommand *ships = move->params.kamikaze.ships;
     if (ships != NULL)
@@ -502,7 +505,7 @@ void aimShipDiedKamikaze(AITeam *team,AITeamMove *move,Ship *ship)
     }
 }
 
-void aimCloseKamikaze(AITeam *team,AITeamMove *move)
+void aimCloseKamikaze(struct AITeam *team,AITeamMove *move)
 {
     if (move->params.kamikaze.ships != NULL)
     {
@@ -511,7 +514,7 @@ void aimCloseKamikaze(AITeam *team,AITeamMove *move)
     }
 }
 
-AITeamMove *aimCreateKamikazeNoAdd(AITeam *team, SelectCommand *targets,TypeOfFormation formation, bool8 wait, bool8 remove)
+AITeamMove *aimCreateKamikazeNoAdd(struct AITeam *team, SelectCommand *targets,TypeOfFormation formation, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "kamikazemove", 0);
 
@@ -523,7 +526,7 @@ AITeamMove *aimCreateKamikazeNoAdd(AITeam *team, SelectCommand *targets,TypeOfFo
     return newMove;
 }
 
-AITeamMove *aimCreateKamikaze(AITeam *team, SelectCommand *targets,TypeOfFormation formation, bool8 wait, bool8 remove)
+AITeamMove *aimCreateKamikaze(struct AITeam *team, SelectCommand *targets,TypeOfFormation formation, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -551,7 +554,7 @@ void aimLoad_Kamikaze(AITeamMove *move)
 }
 
 
-static void GetFromReservesShipsOfShipType(AITeam *team,ShipType shiptype,sdword equivvalue,sdword *numPointsLeftToGet)
+static void GetFromReservesShipsOfShipType(struct AITeam *team,ShipType shiptype,sdword equivvalue,sdword *numPointsLeftToGet)
 {
     SelectCommand *selection;
     sdword i;
@@ -577,7 +580,7 @@ foundship:;
     }
 }
 
-void aimCloseFancyGetShips(AITeam *team,AITeamMove *move)
+void aimCloseFancyGetShips(struct AITeam *team,AITeamMove *move)
 {
     if (move->params.fancyGetShips.doneVar != NULL)
     {
@@ -586,7 +589,7 @@ void aimCloseFancyGetShips(AITeam *team,AITeamMove *move)
     }
 }
 
-sdword aimProcessFancyGetShips(AITeam *team)
+sdword aimProcessFancyGetShips(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove;
     AIVar *doneVar;
@@ -811,7 +814,7 @@ havebuiltbaseshiporfirst:;
     return aivarValueGet(thisMove->params.getShips.doneVar);
 }
 
-AITeamMove *aimCreateFancyGetShipsNoAdd(AITeam *team, ShipType shiptype, sbyte num_ships, AlternativeShips *alternatives, sdword priority, bool8 wait, bool8 remove)
+AITeamMove *aimCreateFancyGetShipsNoAdd(struct AITeam *team, ShipType shiptype, sbyte num_ships, AlternativeShips *alternatives, sdword priority, bool8 wait, bool8 remove)
 {
     TypeOfFormation formation = SAME_FORMATION;
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "getshipsmove", 0);
@@ -841,7 +844,7 @@ AITeamMove *aimCreateFancyGetShipsNoAdd(AITeam *team, ShipType shiptype, sbyte n
     return newMove;
 }
 
-AITeamMove *aimCreateFancyGetShips(AITeam *team, ShipType shiptype, sbyte num_ships, AlternativeShips *alternatives, sdword priority, bool8 wait, bool8 remove)
+AITeamMove *aimCreateFancyGetShips(struct AITeam *team, ShipType shiptype, sbyte num_ships, AlternativeShips *alternatives, sdword priority, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 

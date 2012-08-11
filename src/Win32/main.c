@@ -7,7 +7,7 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <winreg.h>
+//#include <winreg.h>
 
 #include "leakyfaucet.h"
 #include "regkey.h"
@@ -86,7 +86,7 @@ int RegisterCommandLine(char *commandLine)
 #include "consmgr.h"
 #include "rinit.h"
 #include "avi.h"
-#include "bink.h"
+//#include "bink.h"
 #include "titannet.h"
 #include "multiplayergame.h"
 #include "subtitle.h"

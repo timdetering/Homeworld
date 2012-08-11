@@ -8,7 +8,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
+//#include <math.h>
 #include <stdio.h>
 #include "glinc.h"
 #include "types.h"

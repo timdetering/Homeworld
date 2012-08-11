@@ -25,7 +25,7 @@ bool aitAnyTeamOfPlayerGuardingThisShip(struct AIPlayer *aiplayer,Ship *ship)
     sdword i;
     Node *node;
     AITeamMove *move;
-    AITeam *team;
+    struct AITeam *team;
 
     for (i = 0; i < aiplayer->teamsUsed; ++i)
     {
@@ -88,7 +88,7 @@ void aidSendInvasionSignal(SelectCommand *ships)
     Outputs     :
     Return      : void
 ----------------------------------------------------------------------------*/
-void aidClearDistressSignal(AIPlayer *aiplayer)
+void aidClearDistressSignal(struct AIPlayer *aiplayer)
 {
     if (aiplayer->aidDefenseTargets)
     {
@@ -157,7 +157,7 @@ void aidCleanupUnusedTeams(void)
         if (aitTeamIsDone(aiCurrentAIPlayer->guardTeams[i]))
         {
             // return any members of team to reserves:
-            AITeam *team = aiCurrentAIPlayer->guardTeams[i];
+            struct AITeam *team = aiCurrentAIPlayer->guardTeams[i];
             sdword j;
 
             for (j=0;j<team->shipList.selection->numShips;j++)
@@ -380,7 +380,7 @@ void aidSetupRovingDefenseTeams(void)
 ----------------------------------------------------------------------------*/
 void aidPositionProximitySensorRoving(udword index)
 {
-    AITeam *team;
+    struct AITeam *team;
     SelectCommand selone;
 
     selone.numShips   = 1;
@@ -539,7 +539,7 @@ void aidCloakDefense(void)
 SelectCommand *aidAddSlackerShips(void)
 {
     udword i;
-    AITeam *slackteam;
+    struct AITeam *slackteam;
     struct AITeamMove *newMove;
     SelectCommand *slackerships = NULL;
 
@@ -578,7 +578,7 @@ SelectCommand *aidAddSlackerShips(void)
 SelectCommand *aidAddGuardingShips(void)
 {
     udword i;
-    AITeam *guardteam;
+    struct AITeam *guardteam;
     SelectCommand *guardships = NULL;
     AITeamMove *newMove;
 
@@ -613,7 +613,7 @@ SelectCommand *aidAddGuardingShips(void)
 SelectCommand *aidAddAllShips(SelectCommand *enemyships)
 {
     udword i;
-    AITeam *team;
+    struct AITeam *team;
     SelectCommand *newships = NULL;
     AITeamMove *newMove;
 
@@ -656,7 +656,7 @@ void aidMothershipDefense(void)
     SelectCommand *enemyships = NULL, *newships = NULL, *goodguyships = NULL, *combatreserves;
     ShipPtr Ship;
     udword i, newteam;
-    AITeam *mdteam = NULL;
+    struct AITeam *mdteam = NULL;
     ShipPtr mothership = aiCurrentAIPlayer->player->PlayerMothership;
 
     enemyships = aiuEnemyShipsInMothershipBlob();

@@ -8,7 +8,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
+//#include <math.h>
 #include "maths.h"
 #include "types.h"
 #include "memory.h"

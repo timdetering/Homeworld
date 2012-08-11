@@ -16,7 +16,7 @@
 #include "fquant.h"
 #include "chatting.h"
 #include "singleplayer.h"
-#include "bink.h"
+//#include "bink.h"
 #include "utility.h"
 
 #define STATE_BREAK     3

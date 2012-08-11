@@ -7,10 +7,11 @@
 =============================================================================*/
 
 #ifndef SW_Render
-#include <windows.h>
+//#include <windows.h>
+#include "PrecompiledHeader.h"
 #endif
 #include "glinc.h"
-#include <math.h>
+//#include <math.h>
 #include <float.h>
 #include <stdio.h>
 #include "spaceobj.h"

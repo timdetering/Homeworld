@@ -10,8 +10,9 @@
 #define CP_SCALE_HUESAT 0
 
 #ifndef SW_Render
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+//#define WIN32_LEAN_AND_MEAN
+//#include <windows.h>
+#include <PrecompiledHeader.h>
 #endif
 #include <stdio.h>
 #include "glinc.h"

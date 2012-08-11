@@ -1,7 +1,7 @@
 #ifndef _iMATHS_H
 #define _iMATHS_H
 
-#include <math.h>
+//#include <math.h>
 #include "kgl.h"
 
 #ifndef M_PI

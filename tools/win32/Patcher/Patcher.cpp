@@ -1,5 +1,5 @@
 #include <windows.h>
-#include <winreg.h>
+//#include <winreg.h>
 #include <commdlg.h>
 #include "PatcherLocalize.h"
 #include <stdio.h>

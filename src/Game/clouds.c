@@ -7,11 +7,12 @@
 =============================================================================*/
 
 #ifndef SW_Render
-#include <windows.h>
+//#include <windows.h>
+#include <PrecompiledHeader.h>
 #endif
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
+//#include <math.h>
 #include "types.h"
 #include "memory.h"
 #include "clouds.h"

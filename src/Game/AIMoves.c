@@ -12,7 +12,7 @@
 #include "AIUtilities.h"
 #include "SaveGame.h"
 
-sdword aimProcessGuardShips(AITeam *team)
+sdword aimProcessGuardShips(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove;
     SelectCommand *selection = team->shipList.selection;
@@ -54,7 +54,7 @@ sdword aimProcessGuardShips(AITeam *team)
     }
 }
 
-void aimShipDiedGuardShips(AITeam *team,AITeamMove *move,Ship *ship)
+void aimShipDiedGuardShips(struct AITeam *team,AITeamMove *move,Ship *ship)
 {
     SelectCommand *ships = move->params.guardShips.ships;
     if (ships != NULL)
@@ -67,7 +67,7 @@ void aimShipDiedGuardShips(AITeam *team,AITeamMove *move,Ship *ship)
     }
 }
 
-void aimCloseGuardShips(AITeam *team,AITeamMove *move)
+void aimCloseGuardShips(struct AITeam *team,AITeamMove *move)
 {
     if (move->params.guardShips.ships != NULL)
     {
@@ -76,7 +76,7 @@ void aimCloseGuardShips(AITeam *team,AITeamMove *move)
     }
 }
 
-AITeamMove *aimCreateGuardShips(AITeam *team, SelectCommand *ships, bool8 wait, bool8 remove)
+AITeamMove *aimCreateGuardShips(struct AITeam *team, SelectCommand *ships, bool8 wait, bool8 remove)
 {
     TypeOfFormation formation = SAME_FORMATION;
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "guardshipsmove", 0);
@@ -107,7 +107,7 @@ void aimLoad_GuardShips(AITeamMove *move)
     if (move->params.guardShips.ships) move->params.guardShips.ships = (SelectCommand *)LoadSelectionAndFix();
 }
 
-sdword aimProcessGetShips(AITeam *team)
+sdword aimProcessGetShips(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove;
     sdword numShipsRequested, typeRequested,numShipsToBuild;
@@ -162,7 +162,7 @@ sdword aimProcessGetShips(AITeam *team)
     return aivarValueGet(thisMove->params.getShips.doneVar);
 }
 
-void aimCloseGetShips(AITeam *team,AITeamMove *move)
+void aimCloseGetShips(struct AITeam *team,AITeamMove *move)
 {
     if (move->params.getShips.doneVar != NULL)
     {
@@ -171,7 +171,7 @@ void aimCloseGetShips(AITeam *team,AITeamMove *move)
     }
 }
 
-AITeamMove *aimCreateGetShipsNoAdd(AITeam *team, ShipType shiptype, sbyte num_ships, sdword priority, bool8 wait, bool8 remove)
+AITeamMove *aimCreateGetShipsNoAdd(struct AITeam *team, ShipType shiptype, sbyte num_ships, sdword priority, bool8 wait, bool8 remove)
 {
     TypeOfFormation formation = SAME_FORMATION;
     AlternativeShips alternatives;
@@ -194,7 +194,7 @@ AITeamMove *aimCreateGetShipsNoAdd(AITeam *team, ShipType shiptype, sbyte num_sh
     return newMove;
 }
 
-AITeamMove *aimCreateGetShips(AITeam *team, ShipType shiptype, sbyte num_ships, sdword priority, bool8 wait, bool8 remove)
+AITeamMove *aimCreateGetShips(struct AITeam *team, ShipType shiptype, sbyte num_ships, sdword priority, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -222,7 +222,7 @@ void aimPreFix_GetShips(AITeamMove *move)
 
 #pragma warning( 2 : 4047)      // turn back on "different levels of indirection warning"
 
-sdword aimProcessVarWait(AITeam *team)
+sdword aimProcessVarWait(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove;
     AIVar *var = aivarFind(thisMove->params.varWait.varName);
@@ -237,7 +237,7 @@ sdword aimProcessVarWait(AITeam *team)
 }
 
 
-AITeamMove *aimCreateVarWait(AITeam *team, char *varName, sdword value, bool8 wait, bool8 remove)
+AITeamMove *aimCreateVarWait(struct AITeam *team, char *varName, sdword value, bool8 wait, bool8 remove)
 {
     TypeOfFormation formation = SAME_FORMATION;
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "varwaitmove", 0);
@@ -265,7 +265,7 @@ void aimFix_VarWait(AITeamMove *move)
     FixMoveFuncPtrs(move,aimProcessVarWait,NULL,NULL);
 }
 
-sdword aimProcessVarDec(AITeam *team)
+sdword aimProcessVarDec(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove;
     AIVar *var = aivarFind(thisMove->params.varDec.varName);
@@ -282,7 +282,7 @@ sdword aimProcessVarDec(AITeam *team)
 }
 
 
-AITeamMove *aimCreateVarDec(AITeam *team, char *varName, bool8 wait, bool8 remove)
+AITeamMove *aimCreateVarDec(struct AITeam *team, char *varName, bool8 wait, bool8 remove)
 {
     TypeOfFormation formation = SAME_FORMATION;
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "vardecmove", 0);
@@ -309,7 +309,7 @@ void aimFix_VarDec(AITeamMove *move)
     FixMoveFuncPtrs(move,aimProcessVarDec,NULL,NULL);
 }
 
-sdword aimProcessVarInc(AITeam *team)
+sdword aimProcessVarInc(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove;
     AIVar *var = aivarFind(thisMove->params.varInc.varName);
@@ -326,7 +326,7 @@ sdword aimProcessVarInc(AITeam *team)
 }
 
 
-AITeamMove *aimCreateVarInc(AITeam *team, char *varName, bool8 wait, bool8 remove)
+AITeamMove *aimCreateVarInc(struct AITeam *team, char *varName, bool8 wait, bool8 remove)
 {
     TypeOfFormation formation = SAME_FORMATION;
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "varincmove", 0);
@@ -353,7 +353,7 @@ void aimFix_VarInc(AITeamMove *move)
     FixMoveFuncPtrs(move,aimProcessVarInc,NULL,NULL);
 }
 
-sdword aimProcessVarSet(AITeam *team)
+sdword aimProcessVarSet(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove;
     AIVar *var = aivarFind(thisMove->params.varSet.varName);
@@ -368,7 +368,7 @@ sdword aimProcessVarSet(AITeam *team)
 }
 
 
-AITeamMove *aimCreateVarSet(AITeam *team, char *varName, sdword value, bool8 wait, bool8 remove)
+AITeamMove *aimCreateVarSet(struct AITeam *team, char *varName, sdword value, bool8 wait, bool8 remove)
 {
     TypeOfFormation formation = SAME_FORMATION;
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "varsetmove", 0);
@@ -396,7 +396,7 @@ void aimFix_VarSet(AITeamMove *move)
     FixMoveFuncPtrs(move,aimProcessVarSet,NULL,NULL);
 }
 
-sdword aimProcessVarDestroy(AITeam *team)
+sdword aimProcessVarDestroy(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove;
     AIVar *var = aivarFind(thisMove->params.varDestroy.varName);
@@ -410,7 +410,7 @@ sdword aimProcessVarDestroy(AITeam *team)
     return TRUE;
 }
 
-AITeamMove *aimCreateVarDestroy(AITeam *team, char *varName, bool8 wait, bool8 remove)
+AITeamMove *aimCreateVarDestroy(struct AITeam *team, char *varName, bool8 wait, bool8 remove)
 {
     TypeOfFormation formation = SAME_FORMATION;
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "varsetmove", 0);

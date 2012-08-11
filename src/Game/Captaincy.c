@@ -7,8 +7,9 @@
 =============================================================================*/
 
 // unfortunately need this for the timers
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+//#define WIN32_LEAN_AND_MEAN
+//#include <windows.h>
+#include <PrecompiledHeader.h>
 
 #include <string.h>
 #include <stdio.h>

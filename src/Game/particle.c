@@ -9,7 +9,7 @@
 #define PART_TEST_MORPH 0
 
 #include <stdio.h>
-#include <math.h>
+//#include <math.h>
 #include <float.h>
 #include <windows.h>
 #include "glinc.h"

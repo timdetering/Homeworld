@@ -6,7 +6,7 @@
     Copyright Relic Entertainment, Inc.  All rights reserved.
 =============================================================================*/
 
-#include <math.h>
+//#include <math.h>
 #include <float.h>
 #include "types.h"
 #include "fastmath.h"

@@ -8,13 +8,13 @@
     Copyright Relic Entertainment, Inc.  All rights reserved.
 =============================================================================*/
 
-
 #ifndef SW_Render
-#include <windows.h>
+//#include <windows.h>
+#include "PrecompiledHeader.h"
 #endif
 #include <stdio.h>
 #include <string.h>
-#include <math.h>
+//#include <math.h>
 #include "btg.h"
 #include "memory.h"
 #include "vector.h"

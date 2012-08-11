@@ -11,7 +11,7 @@
 #include "glinc.h"
 #include <string.h>
 #include <stdarg.h>
-#include <math.h>
+//#include <math.h>
 #include "types.h"
 #include "file.h"
 #include "memory.h"

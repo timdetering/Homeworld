@@ -1,6 +1,6 @@
 /*=============================================================================
     Name    : AIPlayer.c
-    Purpose : All Computer Player (AIPlayer) interfaces with game happen here
+    Purpose : All Computer Player (struct AIPlayer) interfaces with game happen here
 
     Created 5/31/1998 by gshaw
     Copyright Relic Entertainment, Inc.  All rights reserved.
@@ -28,7 +28,7 @@
 #define AIPLAYER_LOG_FILE_NAME "aiplayerlog.txt"
 
 bool aiplayerLogEnable = FALSE;
-AIPlayer *aiCurrentAIPlayer;
+struct AIPlayer *aiCurrentAIPlayer;
 uword aiIndex;
 
 udword AIPLAYER_UPDATE_RATE[AI_NUM_LEVELS] = { 63, 31, 15 };
@@ -714,11 +714,11 @@ void aiplayerDebugLog(uword playerIndex, char *format, ...)
     }
 }
 
-AIPlayer *aiplayerInit(Player *player,AIPlayerLevel aiplayerLevel)
+struct AIPlayer *aiplayerInit(Player *player,AIPlayerLevel aiplayerLevel)
 {
     udword i;
-    AIPlayer *aiplayer = memAlloc(sizeof(AIPlayer),"AIPlayer",0);
-    memset(aiplayer,0,sizeof(AIPlayer));
+    struct AIPlayer *aiplayer = memAlloc(sizeof(struct AIPlayer),"AIPlayer",0);
+    memset(aiplayer,0,sizeof(struct AIPlayer));
 
     aiplayer->player = player;
     dbgAssert(aiplayerLevel < AI_NUM_LEVELS);
@@ -775,7 +775,7 @@ AIPlayer *aiplayerInit(Player *player,AIPlayerLevel aiplayerLevel)
     return aiplayer;
 }
 
-void aiplayerClose(AIPlayer *aiplayer)
+void aiplayerClose(struct AIPlayer *aiplayer)
 {
     udword i;
 
@@ -807,7 +807,7 @@ void aiplayerClose(AIPlayer *aiplayer)
     memFree(aiplayer);
 }
 
-void aiplayerPlay(AIPlayer *aiplayer)
+void aiplayerPlay(struct AIPlayer *aiplayer)
 {
 //    if (!singlePlayerGame)
         aiCurrentAIPlayer = aiplayer;
@@ -832,7 +832,7 @@ extern bool mrNoAI;
 void aiplayerUpdateAll(void)
 {
     uword i;
-    AIPlayer *aiplayer;
+    struct AIPlayer *aiplayer;
 
     if (gameIsRunning)
     {
@@ -888,7 +888,7 @@ void aiplayerUpdateAll(void)
     Outputs     :
     Return      :
 ----------------------------------------------------------------------------*/
-void ThisAIPlayerShipDiedCB(AIPlayer *aiplayer,Ship *ship)
+void ThisAIPlayerShipDiedCB(struct AIPlayer *aiplayer,Ship *ship)
 {
     if (ship->staticinfo->canReceiveResources)
     {
@@ -903,7 +903,7 @@ void ThisAIPlayerShipDiedCB(AIPlayer *aiplayer,Ship *ship)
     Outputs     :
     Return      :
 ----------------------------------------------------------------------------*/
-void ThisAIPlayerShipCreatedCB(AIPlayer *aiplayer,Ship *ship)
+void ThisAIPlayerShipCreatedCB(struct AIPlayer *aiplayer,Ship *ship)
 {
     if (ship->staticinfo->canReceiveResources)
     {
@@ -920,7 +920,7 @@ void ThisAIPlayerShipCreatedCB(AIPlayer *aiplayer,Ship *ship)
 ----------------------------------------------------------------------------*/
 void aiplayerShipLaunchedCallback(Ship *ship)
 {
-    AIPlayer *aiplayer;
+    struct AIPlayer *aiplayer;
 
     if ((gameIsRunning) && (!nisIsRunning))
     {
@@ -952,7 +952,7 @@ void aiplayerShipLaunchedCallback(Ship *ship)
 ----------------------------------------------------------------------------*/
 void aiplayerPlayerDied(Player *player)
 {
-//    AIPlayer *aiplayer;
+//    struct AIPlayer *aiplayer;
 //    udword DeadPlayerIndex = player->playerIndex, tempIndex,loop,
 //           DeadPlayersEnemy = universe.aiplayerEnemy[DeadPlayerIndex], i,j;
     sdword players[MAX_MULTIPLAYER_PLAYERS][MAX_MULTIPLAYER_PLAYERS];
@@ -1236,10 +1236,10 @@ shipdiedstuff:
 //  return 1 if the ship isn't on any team of the aiplayer
 //  return 0 otherwise
 //
-static ShipNotOnTeam(AIPlayer *aiplayer, Ship *ship)
+static ShipNotOnTeam(struct AIPlayer *aiplayer, Ship *ship)
 {
     sdword i, j;
-    AITeam *teamp;
+    struct AITeam *teamp;
 
     for (i = 0; i < aiplayer->teamsUsed; ++i)
     {
@@ -1258,7 +1258,7 @@ static ShipNotOnTeam(AIPlayer *aiplayer, Ship *ship)
     Outputs     : fills in the computer players newships shiplist
     Return      : void
 ----------------------------------------------------------------------------*/
-void BuildShipList(AIPlayer *aiplayer)
+void BuildShipList(struct AIPlayer *aiplayer)
 {
     Node *shipnode = universe.ShipList.head;
     Ship *ship;
@@ -1285,7 +1285,7 @@ void BuildShipList(AIPlayer *aiplayer)
     Outputs     :
     Return      : void
 ----------------------------------------------------------------------------*/
-void FindEnemies(AIPlayer *aiplayer)
+void FindEnemies(struct AIPlayer *aiplayer)
 {
     udword primaryEnemyIndex = 0;
 
@@ -1338,7 +1338,7 @@ void FindEnemies(AIPlayer *aiplayer)
     Outputs     :
     Return      : void
 ----------------------------------------------------------------------------*/
-void aiplayerGameStart(AIPlayer *aiplayer)
+void aiplayerGameStart(struct AIPlayer *aiplayer)
 {
     //put startup code in here
 
@@ -1365,7 +1365,7 @@ void aiplayerGameStart(AIPlayer *aiplayer)
 void aiplayerShipDied(ShipPtr ship)
 {
     udword i;
-    AIPlayer *aiplayer;
+    struct AIPlayer *aiplayer;
     uword playerIndex;
 
     kasShipDied(ship);      // kas runs even when NIS running, so always report ship deaths.
@@ -1441,7 +1441,7 @@ void aiplayerShipDied(ShipPtr ship)
 void aiplayerResourceDied(Resource *resource)
 {
     udword i;
-    AIPlayer *aiplayer;
+    struct AIPlayer *aiplayer;
 
     for (i=0;i<universe.numPlayers;i++)
     {
@@ -1489,7 +1489,7 @@ void aiplayerChangeBigotry(udword newvalue)
     Outputs     : increments the numLeaders variable
     Return      : void
 ----------------------------------------------------------------------------*/
-void aiplayerAddLeader(AIPlayer *aiplayer, ShipPtr ship)
+void aiplayerAddLeader(struct AIPlayer *aiplayer, ShipPtr ship)
 {
     aiplayer->numLeaders++;
     bitSet(ship->attributes, ATTRIBUTES_TeamLeader);
@@ -1505,7 +1505,7 @@ void aiplayerAddLeader(AIPlayer *aiplayer, ShipPtr ship)
 
 #pragma warning( 4 : 4047)      // turns off "different levels of indirection warning"
 
-AIPlayer *fixingThisAIPlayer;
+struct AIPlayer *fixingThisAIPlayer;
 
 void SavePath(struct Path *path)
 {
@@ -1544,7 +1544,7 @@ struct Path *LoadPath(void)
 sdword AITeamToTeamIndex(struct AITeam *team)
 {
     sdword i;
-    AIPlayer *aiplayer;
+    struct AIPlayer *aiplayer;
 
     if (team == NULL)
     {
@@ -1565,7 +1565,7 @@ sdword AITeamToTeamIndex(struct AITeam *team)
     return -1;
 }
 
-struct AITeam *AITeamIndexToTeam(AIPlayer *aiplayer,sdword index)
+struct AITeam *AITeamIndexToTeam(struct AIPlayer *aiplayer,sdword index)
 {
     if (index == -1)
     {
@@ -1622,13 +1622,13 @@ void FixTeamWaitingCB(void *stuff)
 #undef teamWaiting
 }
 
-void SaveThisAIPlayer(AIPlayer *aiplayer)
+void SaveThisAIPlayer(struct AIPlayer *aiplayer)
 {
     SaveChunk *chunk;
-    AIPlayer *sc;
+    struct AIPlayer *sc;
     sdword i;
 
-    chunk = CreateChunk(BASIC_STRUCTURE|AIPLAYER,sizeof(AIPlayer),aiplayer);
+    chunk = CreateChunk(BASIC_STRUCTURE|AIPLAYER,sizeof(struct AIPlayer),aiplayer);
     sc = chunkContents(chunk);
 
     sc->player = SavePlayerToPlayerIndex(aiplayer->player);
@@ -1695,7 +1695,7 @@ void SaveThisAIPlayer(AIPlayer *aiplayer)
     aitSave(aiplayer);
 }
 
-void FixThisAIPlayer(AIPlayer *aiplayer)
+void FixThisAIPlayer(struct AIPlayer *aiplayer)
 {
     sdword i;
 
@@ -1737,17 +1737,17 @@ void FixThisAIPlayer(AIPlayer *aiplayer)
     aitFix(aiplayer);
 }
 
-AIPlayer *LoadThisAIPlayer(void)
+struct AIPlayer *LoadThisAIPlayer(void)
 {
     SaveChunk *chunk;
-    AIPlayer *aiplayer;
+    struct AIPlayer *aiplayer;
     udword i;
 
     chunk = LoadNextChunk();
-    VerifyChunk(chunk,BASIC_STRUCTURE|AIPLAYER,sizeof(AIPlayer));
+    VerifyChunk(chunk,BASIC_STRUCTURE|AIPLAYER,sizeof(struct AIPlayer));
 
-    aiplayer = memAlloc(sizeof(AIPlayer),"AIPlayer",0);
-    memcpy(aiplayer,chunkContents(chunk),sizeof(AIPlayer));
+    aiplayer = memAlloc(sizeof(struct AIPlayer),"AIPlayer",0);
+    memcpy(aiplayer,chunkContents(chunk),sizeof(struct AIPlayer));
     memFree(chunk);
 
     LoadGrowSelectionAndFix(&aiplayer->newships);
@@ -1787,7 +1787,7 @@ AIPlayer *LoadThisAIPlayer(void)
     return aiplayer;
 }
 
-sdword AIPlayerToNumber(AIPlayer *aiplayer)
+sdword AIPlayerToNumber(struct AIPlayer *aiplayer)
 {
     sdword  number;
 
@@ -1803,7 +1803,7 @@ sdword AIPlayerToNumber(AIPlayer *aiplayer)
     return number;
 }
 
-AIPlayer *NumberToAIPlayer(sdword number)
+struct AIPlayer *NumberToAIPlayer(sdword number)
 {
     if (number == -1)
     {
@@ -1820,7 +1820,7 @@ AIPlayer *NumberToAIPlayer(sdword number)
 void aiplayerSave(void)
 {
     sdword i;
-    AIPlayer *aiplayer;
+    struct AIPlayer *aiplayer;
 
     // Save Global Variables
 
@@ -1848,7 +1848,7 @@ void aiplayerLoad(void)
 
     sdword number;
     sdword i;
-    AIPlayer *aiplayer;
+    struct AIPlayer *aiplayer;
 
     number = LoadInfoNumber();
 

@@ -9,6 +9,7 @@
 #include "types.h"
 #include "shipdefs.h"
 #include "spaceobj.h"
+#include "shipselect.h"
 
 #define NUM_SHIPS_TO_GATHER_STATS_FOR   (TOTAL_STD_SHIPS+TOTAL_STD_SHIPS+TOTAL_P1_SHIPS+TOTAL_P2_SHIPS+TOTAL_P3_SHIPS)
 

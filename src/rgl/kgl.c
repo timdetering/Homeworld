@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
+//#include <math.h>
 #include "kgl.h"
 #include "kgl_macros.h"
 #include "maths.h"

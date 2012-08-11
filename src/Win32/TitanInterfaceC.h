@@ -2,7 +2,8 @@
 #ifndef ___TITAN_INTERFACEC_H
 #define ___TITAN_INTERFACEC_H
 
-#include <wchar.h>
+//#include <wchar.h>
+#include "PrecompiledHeader.h"
 
 // Homeworld Message Types
 #define TITANMSGTYPE_JOINGAMEREQUEST   0x10

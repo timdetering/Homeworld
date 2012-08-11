@@ -10,7 +10,7 @@
 #include "glinc.h"
 #include "main.h"
 #include "memory.h"
-#include "bink.h"
+//#include "bink.h"
 #include "render.h"
 #include "file.h"
 #include "debug.h"

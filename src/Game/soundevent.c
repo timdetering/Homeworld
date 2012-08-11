@@ -15,6 +15,7 @@
 #include "SalCapCorvette.h"
 #include "render.h"
 #include "singleplayer.h"
+#include "main.h"
 
 
 #define DIRECTSOUND     1

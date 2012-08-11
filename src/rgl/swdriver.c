@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <math.h>
+//#include <math.h>
 #include "kgl.h"
 #include "span.h"
 #include "scan.h"

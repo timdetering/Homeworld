@@ -8,6 +8,10 @@
 #include "singleplayer.h"
 #include "tutor.h"
 
+#include "AIMoves.h"
+#include "AIPlayer.h"
+#include "randy.h"
+
 /*=============================================================================
     Special Move functions:
 =============================================================================*/
@@ -19,7 +23,7 @@
     Outputs     :
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimInsertMove(AITeam *team, struct AITeamMove *newMove)
+void aimInsertMove(struct AITeam *team, struct AITeamMove *newMove)
 {
     if (team->curMove == NULL)
     {
@@ -50,7 +54,7 @@ void aimInsertMove(AITeam *team, struct AITeamMove *newMove)
     Outputs     :
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimMoveSplitShipDied(AITeam *team, AITeamMove *move, ShipPtr ship)
+void aimMoveSplitShipDied(struct AITeam *team, AITeamMove *move, ShipPtr ship)
 {
     udword i;
     bool found = FALSE;
@@ -92,7 +96,7 @@ void aimMoveSplitShipDied(AITeam *team, AITeamMove *move, ShipPtr ship)
     Outputs     : Deallocates the ships structure
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimMoveSplitClose(AITeam *team, AITeamMove *move)
+void aimMoveSplitClose(struct AITeam *team, AITeamMove *move)
 {
     aiumemFree(move->params.movesplit.ships);
     aiumemFree(move->params.movesplit.destinations);
@@ -112,7 +116,7 @@ void aimMoveSplitClose(AITeam *team, AITeamMove *move)
     Outputs     :
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimInterceptShipDied(AITeam *team, AITeamMove *move, ShipPtr ship)
+void aimInterceptShipDied(struct AITeam *team, AITeamMove *move, ShipPtr ship)
 {
     if (ship == move->params.intercept.ship)
     {
@@ -130,7 +134,7 @@ void aimInterceptShipDied(AITeam *team, AITeamMove *move, ShipPtr ship)
     Outputs     : Deallocates the targets structure
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimFlankAttackClose(AITeam *team, struct AITeamMove *move)
+void aimFlankAttackClose(struct AITeam *team, struct AITeamMove *move)
 {
     aiumemFree(move->params.flankatt.targets);
     aiplayerLog((team->aiplayerowner->player->playerIndex,"%x Closed Flank Attack Move", team));
@@ -146,7 +150,7 @@ void aimFlankAttackClose(AITeam *team, struct AITeamMove *move)
     Outputs     : Removes the ship from any structure it might be a part of
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimFlankAttackShipDied(AITeam *team, struct AITeamMove *move, Ship *ship)
+void aimFlankAttackShipDied(struct AITeam *team, struct AITeamMove *move, Ship *ship)
 {
     if (move->params.flankatt.targets != NULL)
     {
@@ -165,7 +169,7 @@ void aimFlankAttackShipDied(AITeam *team, struct AITeamMove *move, Ship *ship)
     Outputs     : Deallocates the targets structure
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimAdvancedAttackClose(AITeam *team, struct AITeamMove *move)
+void aimAdvancedAttackClose(struct AITeam *team, struct AITeamMove *move)
 {
     aiumemFree(move->params.advatt.targets);
     aiplayerLog((team->aiplayerowner->player->playerIndex,"%x Closed Advanced Attack Move", team));
@@ -183,7 +187,7 @@ void aimAdvancedAttackClose(AITeam *team, struct AITeamMove *move)
     Outputs     : Removes the ship from any structure it might be a part of
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimAdvancedAttackShipDied(AITeam *team, struct AITeamMove *move, Ship *ship)
+void aimAdvancedAttackShipDied(struct AITeam *team, struct AITeamMove *move, Ship *ship)
 {
     if (move->params.advatt.targets != NULL)
     {
@@ -214,7 +218,7 @@ void aimAdvancedAttackShipDied(AITeam *team, struct AITeamMove *move, Ship *ship
     Outputs     : removes ship from structure
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimMoveAttackShipDied(AITeam *team, struct AITeamMove *move, ShipPtr ship)
+void aimMoveAttackShipDied(struct AITeam *team, struct AITeamMove *move, ShipPtr ship)
 {
     if (move->params.moveatt.targets != NULL)
     {
@@ -236,7 +240,7 @@ void aimMoveAttackShipDied(AITeam *team, struct AITeamMove *move, ShipPtr ship)
     Outputs     : deallocates the targets structure
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimMoveAttackClose(AITeam *team, struct AITeamMove *move)
+void aimMoveAttackClose(struct AITeam *team, struct AITeamMove *move)
 {
     aiumemFree(move->params.moveatt.targets);
     aiplayerLog((team->aiplayerowner->player->playerIndex,"%x Closed Move Attack Move", team));
@@ -255,7 +259,7 @@ void aimMoveAttackClose(AITeam *team, struct AITeamMove *move)
     Outputs     :
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimHarassAttackShipDied(AITeam *team, struct AITeamMove *move, Ship *ship)
+void aimHarassAttackShipDied(struct AITeam *team, struct AITeamMove *move, Ship *ship)
 {
     if ((move->params.harass.target != NULL) && (move->params.harass.target == ship))
     {
@@ -289,7 +293,7 @@ void aimHarassAttackShipDied(AITeam *team, struct AITeamMove *move, Ship *ship)
     Outputs     : Deallocates the shipsDocking structure
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimDockClose(AITeam *team, struct AITeamMove *move)
+void aimDockClose(struct AITeam *team, struct AITeamMove *move)
 {
     aiumemFree(move->params.dock.shipsDocking);
     move->params.dock.shipsDocking = NULL;
@@ -305,7 +309,7 @@ void aimDockClose(AITeam *team, struct AITeamMove *move)
     Outputs     : removes references of the ship from the dock structure
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimDockShipDied(AITeam *team, struct AITeamMove *move, Ship *ship)
+void aimDockShipDied(struct AITeam *team, struct AITeamMove *move, Ship *ship)
 {
     if (move->params.dock.shipsDocking != NULL)
     {
@@ -329,7 +333,7 @@ void aimDockShipDied(AITeam *team, struct AITeamMove *move, Ship *ship)
     Outputs     : Deallocates the defend mothership structure
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimDefendMothershipClose(AITeam *team, struct AITeamMove *move)
+void aimDefendMothershipClose(struct AITeam *team, struct AITeamMove *move)
 {
     //blah blah blah
 }
@@ -344,7 +348,7 @@ void aimDefendMothershipClose(AITeam *team, struct AITeamMove *move)
     Outputs     : removes references of the ship from the move structure
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimDefendMothershipShipDied(AITeam *team, struct AITeamMove *move, Ship *ship)
+void aimDefendMothershipShipDied(struct AITeam *team, struct AITeamMove *move, Ship *ship)
 {
     if ((move->params.defmoship.targets) && (clRemoveShipFromSelection(move->params.defmoship.targets, ship)))
     {
@@ -364,7 +368,7 @@ void aimDefendMothershipShipDied(AITeam *team, struct AITeamMove *move, Ship *sh
     Outputs     : deallocates the path structure in the patrol move
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimPatrolMoveClose(AITeam *team, struct AITeamMove *move)
+void aimPatrolMoveClose(struct AITeam *team, struct AITeamMove *move)
 {
     memFree(move->params.patrolmove.path);
 }
@@ -379,7 +383,7 @@ void aimPatrolMoveClose(AITeam *team, struct AITeamMove *move)
     Outputs     : removes references of the ship from the move structure
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimSupportShipDied(AITeam *team, struct AITeamMove *move, Ship *ship)
+void aimSupportShipDied(struct AITeam *team, struct AITeamMove *move, Ship *ship)
 {
     if ((move->params.support.ships) && (clRemoveShipFromSelection(move->params.support.ships, ship)))
     {
@@ -396,7 +400,7 @@ void aimSupportShipDied(AITeam *team, struct AITeamMove *move, Ship *ship)
     Outputs     : Deallocates a selection
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimSupportClose(AITeam *team, struct AITeamMove *move)
+void aimSupportClose(struct AITeam *team, struct AITeamMove *move)
 {
     aiumemFree(move->params.support.ships);
 }
@@ -411,7 +415,7 @@ void aimSupportClose(AITeam *team, struct AITeamMove *move)
     Outputs     : removes references of the ship from the move structure
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimShipReconShipDied(AITeam *team, struct AITeamMove *move, Ship *ship)
+void aimShipReconShipDied(struct AITeam *team, struct AITeamMove *move, Ship *ship)
 {
     if (clRemoveShipFromSelection(move->params.shiprecon.ships, ship))
     {
@@ -439,7 +443,7 @@ void aimShipReconShipDied(AITeam *team, struct AITeamMove *move, Ship *ship)
     Outputs     : deallocs a few structures
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimShipReconClose(AITeam *team, struct AITeamMove *move)
+void aimShipReconClose(struct AITeam *team, struct AITeamMove *move)
 {
     aiumemFree(move->params.shiprecon.foundships);
     aiumemFree(move->params.shiprecon.ships);
@@ -453,7 +457,7 @@ void aimShipReconClose(AITeam *team, struct AITeamMove *move)
     Outputs     :
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimControlResourcesShipDied(AITeam *team, struct AITeamMove *move, ShipPtr ship)
+void aimControlResourcesShipDied(struct AITeam *team, struct AITeamMove *move, ShipPtr ship)
 {
     //already taken care of because the ships pointer points to
     //aiplayer->airResourceCollectors, which removes ships on its own
@@ -467,7 +471,7 @@ void aimControlResourcesShipDied(AITeam *team, struct AITeamMove *move, ShipPtr 
     Outputs     : removes the ship from one of the swarm attack structures
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimSwarmAttackShipDied(AITeam *team, struct AITeamMove *move, ShipPtr ship)
+void aimSwarmAttackShipDied(struct AITeam *team, struct AITeamMove *move, ShipPtr ship)
 {
     SelectCommand *targets = move->params.swarmatt.targets;
     SelectCommand *othertargets = move->params.swarmatt.othertargets;
@@ -531,7 +535,7 @@ void aimSwarmAttackShipDied(AITeam *team, struct AITeamMove *move, ShipPtr ship)
     Outputs     : frees a few structures
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimSwarmAttackClose(AITeam *team, AITeamMove *move)
+void aimSwarmAttackClose(struct AITeam *team, AITeamMove *move)
 {
     growSelectClose(&move->params.swarmatt.newSwarmers);
     aiumemFree(move->params.swarmatt.targets);
@@ -546,7 +550,7 @@ void aimSwarmAttackClose(AITeam *team, AITeamMove *move)
     Outputs     : removes the ship from one of the swarm defense structures
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimSwarmDefenseShipDied(AITeam *team, struct AITeamMove *move, ShipPtr ship)
+void aimSwarmDefenseShipDied(struct AITeam *team, struct AITeamMove *move, ShipPtr ship)
 {
     if (growSelectRemoveShip(&move->params.swarmdef.newSwarmers, ship))
     {
@@ -582,7 +586,7 @@ void aimSwarmDefenseShipDied(AITeam *team, struct AITeamMove *move, ShipPtr ship
     Outputs     : frees a few structures
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimSwarmDefenseClose(AITeam *team, AITeamMove *move)
+void aimSwarmDefenseClose(struct AITeam *team, AITeamMove *move)
 {
     growSelectClose(&move->params.swarmdef.newSwarmers);
     aiumemFree(move->params.swarmdef.guarding);
@@ -599,7 +603,7 @@ void aimSwarmDefenseClose(AITeam *team, AITeamMove *move)
     Outputs     :
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimResourceVolumeResourceDied(AITeam *team, AITeamMove *move, Resource *resource)
+void aimResourceVolumeResourceDied(struct AITeam *team, AITeamMove *move, Resource *resource)
 {
     udword i;
 
@@ -650,7 +654,7 @@ void aimResourceVolumeResourceDied(AITeam *team, AITeamMove *move, Resource *res
     Outputs     : Deallocates some structures
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimResourceVolumeShipDied(AITeam *team, AITeamMove *move, ShipPtr ship)
+void aimResourceVolumeShipDied(struct AITeam *team, AITeamMove *move, ShipPtr ship)
 {
     if (ShipInSelection(team->shipList.selection, ship))
     {
@@ -666,7 +670,7 @@ void aimResourceVolumeShipDied(AITeam *team, AITeamMove *move, ShipPtr ship)
     Outputs     : Deallocates some structures
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimResourceVolumeClose(AITeam *team, AITeamMove *move)
+void aimResourceVolumeClose(struct AITeam *team, AITeamMove *move)
 {
     aiumemFree(move->params.resvolume.volResources);
     aiumemFree(move->params.resvolume.takenResources);
@@ -679,7 +683,7 @@ void aimResourceVolumeClose(AITeam *team, AITeamMove *move)
     Outputs     : Deallocates some pointers
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimCaptureShipDied(AITeam *team, AITeamMove *move, ShipPtr ship)
+void aimCaptureShipDied(struct AITeam *team, AITeamMove *move, ShipPtr ship)
 {
     if (ship == move->params.capture.ship)
     {
@@ -697,7 +701,7 @@ void aimCaptureShipDied(AITeam *team, AITeamMove *move, ShipPtr ship)
     Outputs     :
     Return      : void
 ----------------------------------------------------------------------------*/
-void aimMothershipMoveShipDied(AITeam *team, AITeamMove *move, ShipPtr ship)
+void aimMothershipMoveShipDied(struct AITeam *team, AITeamMove *move, ShipPtr ship)
 {
     //do something here... make sure it's really cool.
 }
@@ -716,7 +720,7 @@ void aimMothershipMoveShipDied(AITeam *team, AITeamMove *move, ShipPtr ship)
     Outputs     :
     Return      : Returns true when the team is done moving
 ----------------------------------------------------------------------------*/
-sdword aimProcessMove(AITeam *team)
+sdword aimProcessMove(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove;
 
@@ -767,7 +771,7 @@ sdword aimProcessMove(AITeam *team)
     Outputs     : Moves ships around
     Return      : Returns TRUE when the team is done moving
 ----------------------------------------------------------------------------*/
-sdword aimProcessMoveSplit(AITeam *team)
+sdword aimProcessMoveSplit(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove;
     SelectCommand selone;
@@ -819,7 +823,7 @@ sdword aimProcessMoveSplit(AITeam *team)
     Outputs     : See "description"
     Return      : Returns TRUE when the team is done hyperspacing
 ----------------------------------------------------------------------------*/
-sdword aimProcessHyperspace(AITeam *team)
+sdword aimProcessHyperspace(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove;
     MaxSelection hyperspacingShips;
@@ -878,7 +882,7 @@ sdword aimProcessHyperspace(AITeam *team)
     Outputs     : May create some moveteam moves
     Return      : TRUE if the move is finished
 ----------------------------------------------------------------------------*/
-sdword aimProcessIntercept(AITeam *team)
+sdword aimProcessIntercept(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove, *newMove;
     ShipPtr ship = thisMove->params.intercept.ship;
@@ -955,7 +959,7 @@ sdword aimProcessIntercept(AITeam *team)
     Outputs     :
     Return      : TRUE if the move is complete
 ----------------------------------------------------------------------------*/
-sdword aimProcessMoveTo(AITeam *team)
+sdword aimProcessMoveTo(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove;
     vector current_location;
@@ -1017,7 +1021,7 @@ sdword aimProcessMoveTo(AITeam *team)
     Outputs     :
     Return      : Returns TRUE when the team is done counting
 ----------------------------------------------------------------------------*/
-sdword aimProcessCountShips(AITeam *team)
+sdword aimProcessCountShips(struct AITeam *team)
 {
     //just a placeholder for now
     //later maybe actually count ships nearby
@@ -1034,7 +1038,7 @@ sdword aimProcessCountShips(AITeam *team)
     Outputs     : A neato flanking attack
     Return      : Returns TRUE when the team is done attacking
 ----------------------------------------------------------------------------*/
-sdword aimProcessFlankAttack(AITeam *team)
+sdword aimProcessFlankAttack(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove, *newMove;
     vector current_location, target_location, flank_location, zerovec = {0,0,0};
@@ -1094,7 +1098,7 @@ sdword aimProcessFlankAttack(AITeam *team)
     Outputs     : Creates some new move
     Return      : TRUE when all the targets are dead
 ----------------------------------------------------------------------------*/
-sdword aimProcessMoveAttack(AITeam *team)
+sdword aimProcessMoveAttack(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove, *newMove;
     SelectCommand *victims = thisMove->params.moveatt.targets, *teamShips = team->shipList.selection;
@@ -1171,7 +1175,7 @@ sdword aimProcessMoveAttack(AITeam *team)
     Outputs     : Kills lotsa ships
     Return      : Returns TRUE when the team is done attacking
 ----------------------------------------------------------------------------*/
-sdword aimProcessAdvancedAttack(AITeam *team)
+sdword aimProcessAdvancedAttack(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove;
     SelectCommand *moveTargets = thisMove->params.advatt.targets;
@@ -1246,7 +1250,7 @@ sdword aimProcessAdvancedAttack(AITeam *team)
     Outputs     :
     Return      : Returns TRUE when the team is done attacking
 ----------------------------------------------------------------------------*/
-sdword aimProcessHarassAttack(AITeam *team)
+sdword aimProcessHarassAttack(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove, *newMove;
     real32 target_distance_sq;
@@ -1354,7 +1358,7 @@ sdword aimProcessHarassAttack(AITeam *team)
     Outputs     : Issues a dock command
     Return      : void
 ----------------------------------------------------------------------------*/
-sdword aimProcessDock(AITeam *team)
+sdword aimProcessDock(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove/*, *newMove*/;
     sdword i = 0, numShips = team->shipList.selection->numShips;
@@ -1453,7 +1457,7 @@ sdword aimProcessDock(AITeam *team)
     Outputs     : Dead enemy ships.  Lots of 'em
     Return      : TRUE if the all clear command has been given
 ----------------------------------------------------------------------------*/
-sdword aimProcessDefendMothership(AITeam *team)
+sdword aimProcessDefendMothership(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove, *newMove;
     SelectCommand *target;
@@ -1494,7 +1498,7 @@ sdword aimProcessDefendMothership(AITeam *team)
     Outputs     : Creates a whole bunch of moveteam moves
     Return      : TRUE if the patrol move has completed
 ----------------------------------------------------------------------------*/
-sdword aimProcessPatrolMove(AITeam *team)
+sdword aimProcessPatrolMove(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove, *newMove, *tempMove;
     udword i, num_points = thisMove->params.patrolmove.path->numPoints,
@@ -1588,7 +1592,7 @@ sdword aimProcessPatrolMove(AITeam *team)
     Outputs     : Creates a bunch of moves
     Return      : TRUE if the move is done
 ----------------------------------------------------------------------------*/
-sdword aimProcessActivePatrol(AITeam *team)
+sdword aimProcessActivePatrol(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove, *newMove;
     Path *patrolpath;
@@ -1625,7 +1629,7 @@ sdword aimProcessActivePatrol(AITeam *team)
     Outputs     : Creates a whack of moves
     Return      : TRUE if the move is done
 ----------------------------------------------------------------------------*/
-sdword aimProcessTempGuard(AITeam *team)
+sdword aimProcessTempGuard(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove, *newMove;
     MaxSelection invadingShips, distressShips;
@@ -1718,9 +1722,9 @@ sdword aimProcessTempGuard(AITeam *team)
     Outputs     :
     Return      : TRUE if the move is completed
 ----------------------------------------------------------------------------*/
-sdword aimProcessReinforce(AITeam *team)
+sdword aimProcessReinforce(struct AITeam *team)
 {
-    AITeam *reinforceTeam = team->curMove->params.reinforce.reinforceteam;
+    struct AITeam *reinforceTeam = team->curMove->params.reinforce.reinforceteam;
     AITeamMove *thisMove = team->curMove, *reinforceMove = reinforceTeam->curMove, *newMove;
     sdword i;
 
@@ -1826,7 +1830,7 @@ sdword aimProcessReinforce(AITeam *team)
     Outputs     : May create some new moves if needed
     Return      : TRUE if the move is completed
 ----------------------------------------------------------------------------*/
-sdword aimProcessSupport(AITeam *team)
+sdword aimProcessSupport(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove, *newMove;
     SelectCommand *ships = thisMove->params.support.ships;
@@ -1881,7 +1885,7 @@ sdword aimProcessSupport(AITeam *team)
     Outputs     : Creates a few new moves if needed
     Return      : TRUE if the move is done
 ----------------------------------------------------------------------------*/
-sdword aimProcessActiveRecon(AITeam *team)
+sdword aimProcessActiveRecon(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove, *newMove;
     vector destination;
@@ -2007,7 +2011,7 @@ sdword aimProcessActiveRecon(AITeam *team)
     Outputs     : Creates a few moves - mainly intercept and KILL!!!! Oh... sorry... only intercept...
     Return      : TRUE if the move is done
 ----------------------------------------------------------------------------*/
-sdword aimProcessShipRecon(AITeam *team)
+sdword aimProcessShipRecon(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove, *newMove;
     ShipPtr target;
@@ -2071,7 +2075,7 @@ sdword aimProcessShipRecon(AITeam *team)
     Outputs     : Lots of shooting and stuff - creates attack moves and move moves
     Return      : TRUE if the move is complete
 ----------------------------------------------------------------------------*/
-sdword aimProcessArmada(AITeam *team)
+sdword aimProcessArmada(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove, *newMove;
     MaxSelection hyperspace;
@@ -2150,7 +2154,7 @@ sdword aimProcessArmada(AITeam *team)
     Outputs     : Creates a few moves
     Return      : TRUE if the move is finished
 ----------------------------------------------------------------------------*/
-sdword aimProcessControlResources(AITeam *team)
+sdword aimProcessControlResources(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove, *newMove;
     vector destination;
@@ -2191,7 +2195,7 @@ sdword aimProcessControlResources(AITeam *team)
     Outputs     : Moves ships around
     Return      : TRUE if the move is finished
 ----------------------------------------------------------------------------*/
-sdword aimProcessSwarmAttack(AITeam *team)
+sdword aimProcessSwarmAttack(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove;
     SelectCommand *targets = thisMove->params.swarmatt.targets;
@@ -2328,13 +2332,13 @@ sdword aimProcessSwarmAttack(AITeam *team)
     Outputs     : Moves ships around
     Return      : TRUE if the move is finished
 ----------------------------------------------------------------------------*/
-sdword aimProcessSwarmDefense(AITeam *team)
+sdword aimProcessSwarmDefense(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove;
     SelectCommand *teamShips = team->shipList.selection;
     MaxSelection dockships, guardships;
     paramsSwarmDefense *params = &thisMove->params.swarmdef;
-    AITeam *newPodTeam;
+    struct AITeam *newPodTeam;
     ShipPtr ship;
     udword i, fuellow;
 
@@ -2455,9 +2459,9 @@ sdword aimProcessSwarmDefense(AITeam *team)
     Outputs     : Moving and silly things like that
     Return      : TRUE if the move is finished
 ----------------------------------------------------------------------------*/
-sdword aimProcessSwarmPod(AITeam *team)
+sdword aimProcessSwarmPod(struct AITeam *team)
 {
-    AITeam *attackSwarm = team->cooperatingTeam, *defenseSwarm = team->cooperatingTeam->cooperatingTeam;
+    struct AITeam *attackSwarm = team->cooperatingTeam, *defenseSwarm = team->cooperatingTeam->cooperatingTeam;
     paramsSwarmDefense *defParams = &defenseSwarm->curMove->params.swarmdef;
     AITeamMove *thisMove = team->curMove, *newMove;
     SelectCommand /**enemyShips,*/ *targets;
@@ -2642,7 +2646,7 @@ sdword aimProcessSwarmPod(AITeam *team)
     Outputs     : Moves ships around in a most productive way
     Return      : TRUE if the move is complete (the volume is completely resourced)
 ----------------------------------------------------------------------------*/
-sdword aimProcessResourceVolume(AITeam *team)
+sdword aimProcessResourceVolume(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove;
     Resource *resource, *biggestResource;
@@ -2744,7 +2748,7 @@ sdword aimProcessResourceVolume(AITeam *team)
     Outputs     : Creates some new moves every now and then
     Return      : TRUE if the move is complete
 ----------------------------------------------------------------------------*/
-sdword aimProcessActiveResource(AITeam *team)
+sdword aimProcessActiveResource(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove, *newMove;
     Volume volume;
@@ -2783,7 +2787,7 @@ sdword aimProcessActiveResource(AITeam *team)
     Outputs     : Creates a timed move
     Return      : TRUE if the move is finished
 ----------------------------------------------------------------------------*/
-sdword aimProcessMothershipMove(AITeam *team)
+sdword aimProcessMothershipMove(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove, *newMove;
     vector destination;
@@ -2841,7 +2845,7 @@ sdword aimProcessMothershipMove(AITeam *team)
     Outputs     : Moves some ships around and stuff...
     Return      : TRUE if the move is complete
 ----------------------------------------------------------------------------*/
-sdword aimProcessCapture(AITeam *team)
+sdword aimProcessCapture(struct AITeam *team)
 {
     //basically just latch onto the target.
     //The capture function takes care of the rest.
@@ -2858,7 +2862,7 @@ sdword aimProcessCapture(AITeam *team)
     Outputs     : Moves some ships around, then creates a new move
     Return      : TRUE if the move is complete
 ----------------------------------------------------------------------------*/
-sdword aimProcessActiveCapture(AITeam *team)
+sdword aimProcessActiveCapture(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove;
     SelectCommand *target;
@@ -2925,7 +2929,7 @@ sdword aimProcessActiveCapture(AITeam *team)
     Outputs     : Creates a few new moves
     Return      : TRUE if the move is complete
 ----------------------------------------------------------------------------*/
-sdword aimProcessActiveMine(AITeam *team)
+sdword aimProcessActiveMine(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove, *newMove;
 //    Path *destinations;
@@ -2981,7 +2985,7 @@ sdword aimProcessActiveMine(AITeam *team)
     Outputs     : Creates a few new moves
     Return      : TRUE if the move is complete
 ----------------------------------------------------------------------------*/
-sdword aimProcessMineVolume(AITeam *team)
+sdword aimProcessMineVolume(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove, *newMove, *tempMove;
     Path *minepoints;
@@ -3060,9 +3064,9 @@ sdword aimProcessMineVolume(AITeam *team)
     Outputs     : May create some new moves
     Return      : TRUE if the move is complete
 ----------------------------------------------------------------------------*/
-sdword aimProcessSpecialDefense(AITeam *team)
+sdword aimProcessSpecialDefense(struct AITeam *team)
 {
-    AITeam *coopTeam = team->cooperatingTeam;
+    struct AITeam *coopTeam = team->cooperatingTeam;
     AITeamMove *thisMove = team->curMove, *newMove;
 
     if (team->shipList.selection->numShips == 0)
@@ -3123,7 +3127,7 @@ sdword aimProcessSpecialDefense(AITeam *team)
     Outputs     : Calls the command layer move command
     Return      : the newly created move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateMoveTeamNoAdd(AITeam *team, vector destination, TypeOfFormation formation, bool8 wait, bool8 remove)
+AITeamMove *aimCreateMoveTeamNoAdd(struct AITeam *team, vector destination, TypeOfFormation formation, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "moveteammove", 0);
 
@@ -3135,7 +3139,7 @@ AITeamMove *aimCreateMoveTeamNoAdd(AITeam *team, vector destination, TypeOfForma
     return newMove;
 }
 
-AITeamMove *aimCreateMoveTeam(AITeam *team, vector destination, TypeOfFormation formation, bool8 wait, bool8 remove)
+AITeamMove *aimCreateMoveTeam(struct AITeam *team, vector destination, TypeOfFormation formation, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -3165,7 +3169,7 @@ void aimFix_MoveTeam(AITeamMove *move)
     Outputs     : Creates a new move
     Return      : the newly created move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateMoveTeamIndexNoAdd(AITeam *team, vector destination, udword index,
+AITeamMove *aimCreateMoveTeamIndexNoAdd(struct AITeam *team, vector destination, udword index,
                                         TypeOfFormation formation, TacticsType tactics,
                                         bool8 wait, bool8 remove)
 {
@@ -3180,7 +3184,7 @@ AITeamMove *aimCreateMoveTeamIndexNoAdd(AITeam *team, vector destination, udword
     return newMove;
 }
 
-AITeamMove *aimCreateMoveTeamIndex(AITeam *team, vector destination, udword index,
+AITeamMove *aimCreateMoveTeamIndex(struct AITeam *team, vector destination, udword index,
                                    TypeOfFormation formation, TacticsType tactics,
                                    bool8 wait, bool8 remove)
 {
@@ -3206,7 +3210,7 @@ void aimFix_MoveTeamIndex(AITeamMove *move)
     Outputs     : Creates a new move
     Return      : the newly created move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateMoveTeamSplitNoAdd(AITeam *team, SelectCommand *ships,
+AITeamMove *aimCreateMoveTeamSplitNoAdd(struct AITeam *team, SelectCommand *ships,
                                         Path *destinations, TacticsType tactics,
                                         bool8 wait, bool8 remove)
 {
@@ -3223,7 +3227,7 @@ AITeamMove *aimCreateMoveTeamSplitNoAdd(AITeam *team, SelectCommand *ships,
     return newMove;
 }
 
-AITeamMove *aimCreateMoveTeamSplit(AITeam *team, SelectCommand *ships,
+AITeamMove *aimCreateMoveTeamSplit(struct AITeam *team, SelectCommand *ships,
                                    Path *destinations, TacticsType tactics,
                                    bool8 wait, bool8 remove)
 {
@@ -3267,7 +3271,7 @@ void aimLoad_MoveTeamSplit(AITeamMove *move)
     Outputs     : Calls the command layer move command
     Return      : the newly created move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateHyperspaceNoAdd(AITeam *team, vector destination, TypeOfFormation formation, bool8 wait, bool8 remove)
+AITeamMove *aimCreateHyperspaceNoAdd(struct AITeam *team, vector destination, TypeOfFormation formation, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "movehyperspace", 0);
 
@@ -3279,7 +3283,7 @@ AITeamMove *aimCreateHyperspaceNoAdd(AITeam *team, vector destination, TypeOfFor
     return newMove;
 }
 
-AITeamMove *aimCreateHyperspace(AITeam *team, vector destination, TypeOfFormation formation, bool8 wait, bool8 remove)
+AITeamMove *aimCreateHyperspace(struct AITeam *team, vector destination, TypeOfFormation formation, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -3310,7 +3314,7 @@ void aimFix_Hyperspace(AITeamMove *move)
     Outputs     : Calls the command layer move command
     Return      : the newly created move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateInterceptNoAdd(AITeam *team, ShipPtr ship, real32 interval, TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
+AITeamMove *aimCreateInterceptNoAdd(struct AITeam *team, ShipPtr ship, real32 interval, TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "moveintercept", 0);
 
@@ -3324,7 +3328,7 @@ AITeamMove *aimCreateInterceptNoAdd(AITeam *team, ShipPtr ship, real32 interval,
     return newMove;
 }
 
-AITeamMove *aimCreateIntercept(AITeam *team, ShipPtr ship, real32 interval, TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
+AITeamMove *aimCreateIntercept(struct AITeam *team, ShipPtr ship, real32 interval, TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -3366,7 +3370,7 @@ void aimPreFix_Intercept(AITeamMove *move)
     Outputs     : Creates a new move
     Return      : the new move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateMoveToNoAdd(AITeam *team, vector destination, real32 limiter, udword type, TypeOfFormation formation, TacticsType tactics, bool wait, bool remove)
+AITeamMove *aimCreateMoveToNoAdd(struct AITeam *team, vector destination, real32 limiter, udword type, TypeOfFormation formation, TacticsType tactics, bool wait, bool remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "movemoveto", 0);
 
@@ -3380,7 +3384,7 @@ AITeamMove *aimCreateMoveToNoAdd(AITeam *team, vector destination, real32 limite
     return newMove;
 }
 
-AITeamMove *aimCreateMoveTo(AITeam *team, vector destination, real32 limiter, udword type, TypeOfFormation formation, TacticsType tactics, bool wait, bool remove)
+AITeamMove *aimCreateMoveTo(struct AITeam *team, vector destination, real32 limiter, udword type, TypeOfFormation formation, TacticsType tactics, bool wait, bool remove)
 {
     AITeamMove *newMove;
 
@@ -3405,7 +3409,7 @@ void aimFix_MoveTo(AITeamMove *move)
     Outputs     : Creates a new move structure
     Return      : the newly created move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateCountShipsNoAdd(AITeam *team, bool8 wait, bool8 remove)
+AITeamMove *aimCreateCountShipsNoAdd(struct AITeam *team, bool8 wait, bool8 remove)
 {
     TypeOfFormation formation = SAME_FORMATION;
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "countshipsmove", 0);
@@ -3417,7 +3421,7 @@ AITeamMove *aimCreateCountShipsNoAdd(AITeam *team, bool8 wait, bool8 remove)
     return newMove;
 }
 
-AITeamMove *aimCreateCountShips(AITeam *team, bool8 wait, bool8 remove)
+AITeamMove *aimCreateCountShips(struct AITeam *team, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -3444,7 +3448,7 @@ void aimFix_CountShips(AITeamMove *move)
     Outputs     : Creates a new move structure
     Return      : the newly created move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateFlankAttackNoAdd(AITeam *team, SelectCommand *targets, bool8 hyperspace, bool8 wait, bool8 remove)
+AITeamMove *aimCreateFlankAttackNoAdd(struct AITeam *team, SelectCommand *targets, bool8 hyperspace, bool8 wait, bool8 remove)
 {
     TypeOfFormation formation = SAME_FORMATION;
     AITeamMove *newMove;
@@ -3465,7 +3469,7 @@ AITeamMove *aimCreateFlankAttackNoAdd(AITeam *team, SelectCommand *targets, bool
     return newMove;
 }
 
-AITeamMove *aimCreateFlankAttack(AITeam *team, SelectCommand *targets, bool8 hyperspace, bool8 wait, bool8 remove)
+AITeamMove *aimCreateFlankAttack(struct AITeam *team, SelectCommand *targets, bool8 hyperspace, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -3501,7 +3505,7 @@ void aimLoad_FlankAttack(AITeamMove *move)
     Outputs     : Creates a new move structure
     Return      : the newly created  move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateAdvancedAttackNoAdd(AITeam *team, SelectCommand *targets, TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
+AITeamMove *aimCreateAdvancedAttackNoAdd(struct AITeam *team, SelectCommand *targets, TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -3521,7 +3525,7 @@ AITeamMove *aimCreateAdvancedAttackNoAdd(AITeam *team, SelectCommand *targets, T
     return newMove;
 }
 
-AITeamMove *aimCreateAdvancedAttack(AITeam *team, SelectCommand *target, TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
+AITeamMove *aimCreateAdvancedAttack(struct AITeam *team, SelectCommand *target, TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -3566,7 +3570,7 @@ void aimFix_AdvancedAttack(AITeamMove *move)
     Outputs     : Creates a new move
     Return      : The new move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateMoveAttackNoAdd(AITeam *team, SelectCommand *targets, bool Advanced, TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
+AITeamMove *aimCreateMoveAttackNoAdd(struct AITeam *team, SelectCommand *targets, bool Advanced, TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -3583,7 +3587,7 @@ AITeamMove *aimCreateMoveAttackNoAdd(AITeam *team, SelectCommand *targets, bool 
     }
     return newMove;
 }
-AITeamMove *aimCreateMoveAttack(AITeam *team, SelectCommand *targets, bool Advanced, TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
+AITeamMove *aimCreateMoveAttack(struct AITeam *team, SelectCommand *targets, bool Advanced, TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -3630,7 +3634,7 @@ void aimLoad_MoveAttack(AITeamMove *move)
     Outputs     : Creates a new move structure
     Return      : the newly created move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateHarassAttack(AITeam *team, bool8 wait, bool8 remove)
+AITeamMove *aimCreateHarassAttack(struct AITeam *team, bool8 wait, bool8 remove)
 {
     TypeOfFormation formation = SAME_FORMATION;
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "harassattackmove", 0);
@@ -3669,7 +3673,7 @@ void aimPreFix_HarassAttack(AITeamMove *move)
     Outputs     : Creates a new move structure
     Return      : the newly created move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateDockNoAdd(AITeam *team, sdword dockmoveFlags, ShipPtr dockAt, bool8 wait, bool8 remove)
+AITeamMove *aimCreateDockNoAdd(struct AITeam *team, sdword dockmoveFlags, ShipPtr dockAt, bool8 wait, bool8 remove)
 {
     TypeOfFormation formation = AIM_DOCK_DEFAULT_FORMATION;
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "dockmove", 0);
@@ -3684,7 +3688,7 @@ AITeamMove *aimCreateDockNoAdd(AITeam *team, sdword dockmoveFlags, ShipPtr dockA
     return newMove;
 }
 
-AITeamMove *aimCreateDock(AITeam *team, sdword dockmoveFlags, ShipPtr dockAt, bool8 wait, bool8 remove)
+AITeamMove *aimCreateDock(struct AITeam *team, sdword dockmoveFlags, ShipPtr dockAt, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -3730,7 +3734,7 @@ void aimLoad_Dock(AITeamMove *move)
     Outputs     : Creates a new move structure
     Return      : The newly created move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateDefendMothershipNoAdd(AITeam *team, bool8 wait, bool8 remove)
+AITeamMove *aimCreateDefendMothershipNoAdd(struct AITeam *team, bool8 wait, bool8 remove)
 {
     TypeOfFormation formation = SAME_FORMATION;
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "defendmoshipmove", 0);
@@ -3743,7 +3747,7 @@ AITeamMove *aimCreateDefendMothershipNoAdd(AITeam *team, bool8 wait, bool8 remov
     return newMove;
 }
 
-AITeamMove *aimCreateDefendMothership(AITeam *team, bool8 wait, bool8 remove)
+AITeamMove *aimCreateDefendMothership(struct AITeam *team, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -3778,7 +3782,7 @@ void aimLoad_DefMoship(AITeamMove *move)
     Outputs     : Creates a new move structure
     Return      : The newly created move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreatePatrolMoveNoAdd(AITeam *team, Path *path, udword startIndex,
+AITeamMove *aimCreatePatrolMoveNoAdd(struct AITeam *team, Path *path, udword startIndex,
                                      TypeOfFormation formation, TacticsType tactics,
                                      bool8 wait, bool8 remove)
 {
@@ -3794,7 +3798,7 @@ AITeamMove *aimCreatePatrolMoveNoAdd(AITeam *team, Path *path, udword startIndex
     return newMove;
 }
 
-AITeamMove *aimCreatePatrolMove(AITeam *team, Path *path, udword startIndex,
+AITeamMove *aimCreatePatrolMove(struct AITeam *team, Path *path, udword startIndex,
                                 TypeOfFormation formation, TacticsType tactics,
                                 bool8 wait, bool8 remove)
 {
@@ -3845,7 +3849,7 @@ void aimLoad_PatrolMove(AITeamMove *move)
     Outputs     : Creates a new move
     Return      : the new move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateActivePatrolNoAdd(AITeam *team, udword patroltype, bool8 wait, bool8 remove)
+AITeamMove *aimCreateActivePatrolNoAdd(struct AITeam *team, udword patroltype, bool8 wait, bool8 remove)
 {
     TypeOfFormation formation = DELTA3D_FORMATION;
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "activepatrol", 0);
@@ -3858,7 +3862,7 @@ AITeamMove *aimCreateActivePatrolNoAdd(AITeam *team, udword patroltype, bool8 wa
     return newMove;
 }
 
-AITeamMove *aimCreateActivePatrol(AITeam *team, udword patroltype, bool8 wait, bool8 remove)
+AITeamMove *aimCreateActivePatrol(struct AITeam *team, udword patroltype, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -3884,7 +3888,7 @@ void aimFix_ActivePatrol(AITeamMove *move)
     Outputs     : Creates a new move
     Return      : the new move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateTempGuardNoAdd(AITeam *team, TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
+AITeamMove *aimCreateTempGuardNoAdd(struct AITeam *team, TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "tempguard", 0);
 
@@ -3895,7 +3899,7 @@ AITeamMove *aimCreateTempGuardNoAdd(AITeam *team, TypeOfFormation formation, Tac
     return newMove;
 }
 
-AITeamMove *aimCreateTempGuard(AITeam *team, TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
+AITeamMove *aimCreateTempGuard(struct AITeam *team, TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -3921,7 +3925,7 @@ void aimFix_TempGuard(AITeamMove *move)
     Outputs     : Creates a new move
     Return      : the new move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateReinforceNoAdd(AITeam *team, AITeam *reinforceteam, TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
+AITeamMove *aimCreateReinforceNoAdd(struct AITeam *team, struct AITeam *reinforceteam, TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "reinforce", 0);
 
@@ -3933,7 +3937,7 @@ AITeamMove *aimCreateReinforceNoAdd(AITeam *team, AITeam *reinforceteam, TypeOfF
     return newMove;
 }
 
-AITeamMove *aimCreateReinforce(AITeam *team, AITeam *reinforceteam, TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
+AITeamMove *aimCreateReinforce(struct AITeam *team, struct AITeam *reinforceteam, TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -3972,7 +3976,7 @@ void aimPreFix_Reinforce(AITeamMove *move)
     Outputs     : Creates a new move
     Return      : the new move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateSupportNoAdd(AITeam *team, SelectCommand *ships,
+AITeamMove *aimCreateSupportNoAdd(struct AITeam *team, SelectCommand *ships,
                                   TypeOfFormation formation, TacticsType tactics,
                                   bool8 wait, bool8 remove)
 {
@@ -3987,7 +3991,7 @@ AITeamMove *aimCreateSupportNoAdd(AITeam *team, SelectCommand *ships,
     return newMove;
 }
 
-AITeamMove *aimCreateSupport(AITeam *team, SelectCommand *ships,
+AITeamMove *aimCreateSupport(struct AITeam *team, SelectCommand *ships,
                              TypeOfFormation formation, TacticsType tactics,
                              bool8 wait, bool8 remove)
 {
@@ -4026,7 +4030,7 @@ void aimLoad_Support(AITeamMove *move)
     Outputs     : Creates a new move
     Return      : the new move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateActiveReconNoAdd(AITeam *team, bool EnemyRecon, TypeOfFormation formation,
+AITeamMove *aimCreateActiveReconNoAdd(struct AITeam *team, bool EnemyRecon, TypeOfFormation formation,
                                       TacticsType tactics, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "actrecon", 0);
@@ -4041,7 +4045,7 @@ AITeamMove *aimCreateActiveReconNoAdd(AITeam *team, bool EnemyRecon, TypeOfForma
     return newMove;
 }
 
-AITeamMove *aimCreateActiveRecon(AITeam *team, bool EnemyRecon, TypeOfFormation formation,
+AITeamMove *aimCreateActiveRecon(struct AITeam *team, bool EnemyRecon, TypeOfFormation formation,
                                  TacticsType tactics, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
@@ -4066,7 +4070,7 @@ void aimFix_ActiveRecon(AITeamMove *move)
     Outputs     : Creates a new move
     Return      : the new move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateShipReconNoAdd(AITeam *team, SelectCommand *ships, TypeOfFormation formation,
+AITeamMove *aimCreateShipReconNoAdd(struct AITeam *team, SelectCommand *ships, TypeOfFormation formation,
                                     TacticsType tactics, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "shiprecon", 0);
@@ -4081,7 +4085,7 @@ AITeamMove *aimCreateShipReconNoAdd(AITeam *team, SelectCommand *ships, TypeOfFo
     return newMove;
 }
 
-AITeamMove *aimCreateShipRecon(AITeam *team, SelectCommand *ships, TypeOfFormation formation,
+AITeamMove *aimCreateShipRecon(struct AITeam *team, SelectCommand *ships, TypeOfFormation formation,
                                TacticsType tactics, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
@@ -4117,7 +4121,7 @@ void aimLoad_ShipRecon(AITeamMove *move)
     Outputs     : Creates a new move
     Return      : the new move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateArmadaNoAdd(AITeam *team, TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
+AITeamMove *aimCreateArmadaNoAdd(struct AITeam *team, TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "armada", 0);
 
@@ -4128,7 +4132,7 @@ AITeamMove *aimCreateArmadaNoAdd(AITeam *team, TypeOfFormation formation, Tactic
     return newMove;
 }
 
-AITeamMove *aimCreateArmada(AITeam *team, TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
+AITeamMove *aimCreateArmada(struct AITeam *team, TypeOfFormation formation, TacticsType tactics, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -4156,7 +4160,7 @@ void aimFix_Armada(AITeamMove *move)
     Outputs     : Creates a new move
     Return      : The new move that was created as per "Outputs"
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateControlResourcesNoAdd(AITeam *team, SelectCommand *ships, bool8 wait, bool8 remove)
+AITeamMove *aimCreateControlResourcesNoAdd(struct AITeam *team, SelectCommand *ships, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "rescontrol", 0);
 
@@ -4170,7 +4174,7 @@ AITeamMove *aimCreateControlResourcesNoAdd(AITeam *team, SelectCommand *ships, b
     return newMove;
 }
 
-AITeamMove *aimCreateControlResources(AITeam *team, SelectCommand *ships, bool8 wait, bool8 remove)
+AITeamMove *aimCreateControlResources(struct AITeam *team, SelectCommand *ships, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -4206,7 +4210,7 @@ void aimLoad_ControlResources(AITeamMove *move)
     Outputs     : Creates a new move
     Return      : void
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateSwarmAttackNoAdd(AITeam *team, bool8 wait, bool8 remove)
+AITeamMove *aimCreateSwarmAttackNoAdd(struct AITeam *team, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "swarmattack", 0);
 
@@ -4221,7 +4225,7 @@ AITeamMove *aimCreateSwarmAttackNoAdd(AITeam *team, bool8 wait, bool8 remove)
     return newMove;
 }
 
-AITeamMove *aimCreateSwarmAttack(AITeam *team, bool8 wait, bool8 remove)
+AITeamMove *aimCreateSwarmAttack(struct AITeam *team, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -4262,7 +4266,7 @@ void aimLoad_SwarmAttack(AITeamMove *move)
     Outputs     : Creates a new move
     Return      : void
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateSwarmDefenseNoAdd(AITeam *team, SelectCommand *pods, bool8 wait, bool8 remove)
+AITeamMove *aimCreateSwarmDefenseNoAdd(struct AITeam *team, SelectCommand *pods, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "swarmdefense", 0);
 
@@ -4279,7 +4283,7 @@ AITeamMove *aimCreateSwarmDefenseNoAdd(AITeam *team, SelectCommand *pods, bool8 
     return newMove;
 }
 
-AITeamMove *aimCreateSwarmDefense(AITeam *team, SelectCommand *pods, bool8 wait, bool8 remove)
+AITeamMove *aimCreateSwarmDefense(struct AITeam *team, SelectCommand *pods, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -4317,7 +4321,7 @@ void aimLoad_SwarmDefense(AITeamMove *move)
     Outputs     : A new move is created
     Return      : The new move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateSwarmPodNoAdd(AITeam *team, bool8 wait, bool8 remove)
+AITeamMove *aimCreateSwarmPodNoAdd(struct AITeam *team, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "swarmpod", 0);
 
@@ -4330,7 +4334,7 @@ AITeamMove *aimCreateSwarmPodNoAdd(AITeam *team, bool8 wait, bool8 remove)
 
     return newMove;
 }
-AITeamMove *aimCreateSwarmPod(AITeam *team, bool8 wait, bool8 remove)
+AITeamMove *aimCreateSwarmPod(struct AITeam *team, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -4359,7 +4363,7 @@ void aimFix_SwarmPod(AITeamMove *move)
     Outputs     : Creates a new move
     Return      : the new move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateResourceVolumeNoAdd(AITeam *team, Volume volume, bool8 strictVolume, bool8 wait, bool8 remove)
+AITeamMove *aimCreateResourceVolumeNoAdd(struct AITeam *team, Volume volume, bool8 strictVolume, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "resvolume", 0);
 
@@ -4375,7 +4379,7 @@ AITeamMove *aimCreateResourceVolumeNoAdd(AITeam *team, Volume volume, bool8 stri
 
     return newMove;
 }
-AITeamMove *aimCreateResourceVolume(AITeam *team, Volume volume, bool8 strictVolume, bool8 wait, bool8 remove)
+AITeamMove *aimCreateResourceVolume(struct AITeam *team, Volume volume, bool8 strictVolume, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -4412,7 +4416,7 @@ void aimLoad_ResourceVolume(AITeamMove *move)
     Outputs     : Creates a new move
     Return      : The new move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateActiveResourceNoAdd(AITeam *team, bool8 wait, bool8 remove)
+AITeamMove *aimCreateActiveResourceNoAdd(struct AITeam *team, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "activeres", 0);
 
@@ -4424,7 +4428,7 @@ AITeamMove *aimCreateActiveResourceNoAdd(AITeam *team, bool8 wait, bool8 remove)
     return newMove;
 }
 
-AITeamMove *aimCreateActiveResource(AITeam *team, bool8 wait, bool8 remove)
+AITeamMove *aimCreateActiveResource(struct AITeam *team, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -4448,7 +4452,7 @@ void aimFix_ActiveResource(AITeamMove *move)
     Outputs     : Creates a new move
     Return      : The new move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateMothershipMoveNoAdd(AITeam *team, bool8 wait, bool8 remove)
+AITeamMove *aimCreateMothershipMoveNoAdd(struct AITeam *team, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "mothership", 0);
 
@@ -4460,7 +4464,7 @@ AITeamMove *aimCreateMothershipMoveNoAdd(AITeam *team, bool8 wait, bool8 remove)
     return newMove;
 }
 
-AITeamMove *aimCreateMothershipMove(AITeam *team, bool8 wait, bool8 remove)
+AITeamMove *aimCreateMothershipMove(struct AITeam *team, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -4486,7 +4490,7 @@ void aimFix_MothershipMove(AITeamMove *move)
     Outputs     : Creates a new move
     Return      : the new move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateCaptureNoAdd(AITeam *team, ShipPtr ship, bool8 wait, bool8 remove)
+AITeamMove *aimCreateCaptureNoAdd(struct AITeam *team, ShipPtr ship, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "capture", 0);
 
@@ -4499,7 +4503,7 @@ AITeamMove *aimCreateCaptureNoAdd(AITeam *team, ShipPtr ship, bool8 wait, bool8 
     return newMove;
 }
 
-AITeamMove *aimCreateCapture(AITeam *team, ShipPtr ship, bool8 wait, bool8 remove)
+AITeamMove *aimCreateCapture(struct AITeam *team, ShipPtr ship, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -4524,7 +4528,7 @@ void aimFix_Capture(AITeamMove *move)
     Outputs     : Creates a new move
     Return      : the new move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateActiveCaptureNoAdd(AITeam *team, bool8 wait, bool8 remove)
+AITeamMove *aimCreateActiveCaptureNoAdd(struct AITeam *team, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "activecapture", 0);
 
@@ -4536,7 +4540,7 @@ AITeamMove *aimCreateActiveCaptureNoAdd(AITeam *team, bool8 wait, bool8 remove)
     return newMove;
 }
 
-AITeamMove *aimCreateActiveCapture(AITeam *team, bool8 wait, bool8 remove)
+AITeamMove *aimCreateActiveCapture(struct AITeam *team, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -4560,7 +4564,7 @@ void aimFix_ActiveCapture(AITeamMove *move)
     Outputs     : Creates a new move
     Return      : the new move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateActiveMineNoAdd(AITeam *team, bool8 wait, bool8 remove)
+AITeamMove *aimCreateActiveMineNoAdd(struct AITeam *team, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "activemine", 0);
 
@@ -4572,7 +4576,7 @@ AITeamMove *aimCreateActiveMineNoAdd(AITeam *team, bool8 wait, bool8 remove)
     return newMove;
 }
 
-AITeamMove *aimCreateActiveMine(AITeam *team, bool8 wait, bool8 remove)
+AITeamMove *aimCreateActiveMine(struct AITeam *team, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -4596,7 +4600,7 @@ void aimFix_ActiveMine(AITeamMove *move)
     Outputs     : Creates a new move
     Return      : the new move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateMineVolumeNoAdd(AITeam *team, Volume volume, bool8 wait, bool8 remove)
+AITeamMove *aimCreateMineVolumeNoAdd(struct AITeam *team, Volume volume, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "minevol", 0);
 
@@ -4608,7 +4612,7 @@ AITeamMove *aimCreateMineVolumeNoAdd(AITeam *team, Volume volume, bool8 wait, bo
 
     return newMove;
 }
-AITeamMove *aimCreateMineVolume(AITeam *team, Volume volume, bool8 wait, bool8 remove)
+AITeamMove *aimCreateMineVolume(struct AITeam *team, Volume volume, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -4632,7 +4636,7 @@ void aimFix_MineVolume(AITeamMove *move)
     Outputs     : Creates a new move
     Return      : the new move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateSpecialDefenseNoAdd(AITeam *team, bool8 wait, bool8 remove)
+AITeamMove *aimCreateSpecialDefenseNoAdd(struct AITeam *team, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "specdef", 0);
 
@@ -4643,7 +4647,7 @@ AITeamMove *aimCreateSpecialDefenseNoAdd(AITeam *team, bool8 wait, bool8 remove)
 
     return newMove;
 }
-AITeamMove *aimCreateSpecialDefense(AITeam *team, bool8 wait, bool8 remove)
+AITeamMove *aimCreateSpecialDefense(struct AITeam *team, bool8 wait, bool8 remove)
 {
     AITeamMove *newMove;
 
@@ -4668,7 +4672,7 @@ void aimFix_SpecialDefense(AITeamMove *move)
     Outputs     : Removes the team and it's moves from memory
     Return      : the newly created move
 ----------------------------------------------------------------------------*/
-AITeamMove *aimCreateDeleteTeamNoAdd(AITeam *team)
+AITeamMove *aimCreateDeleteTeamNoAdd(struct AITeam *team)
 {
     AITeamMove *newMove = (AITeamMove *)memAlloc(sizeof(AITeamMove), "delete", 0);
 
@@ -4679,7 +4683,7 @@ AITeamMove *aimCreateDeleteTeamNoAdd(AITeam *team)
     return newMove;
 }
 
-AITeamMove *aimCreateDeleteTeam(AITeam *team)
+AITeamMove *aimCreateDeleteTeam(struct AITeam *team)
 {
     AITeamMove *newMove;
 

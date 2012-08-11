@@ -6,10 +6,11 @@
     Copyright Relic Entertainment, Inc.  All rights reserved.
 =============================================================================*/
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+//#define WIN32_LEAN_AND_MEAN
+//#include <windows.h>
+#include "PrecompiledHeader.h"
 #include <stdio.h>
-#include <math.h>
+//#include <math.h>
 #include "fastmath.h"
 
 #include "types.h"

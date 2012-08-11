@@ -10,6 +10,7 @@
 #include <vfw.h>
 #include "avi.h"
 #include "wave.h"
+#include "main.h"
 
 extern "C" int fullScreen;
 extern "C" void* ghMainWindow;

@@ -10,7 +10,7 @@
 #include <windows.h>
 #endif
 #include <stdio.h>
-#include <math.h>
+//#include <math.h>
 #include "glinc.h"
 #include "main.h"
 #include "types.h"

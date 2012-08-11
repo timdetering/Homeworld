@@ -1,7 +1,7 @@
 
 #include <string.h>
 #include <stdio.h>
-#include <math.h>
+//#include <math.h>
 #include "types.h"
 #include "tweak.h"
 #include "statscript.h"

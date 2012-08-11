@@ -34,11 +34,11 @@
     Outputs     : Allocates memory for a team
     Return      : the new team created
 ----------------------------------------------------------------------------*/
-AITeam *aitCreate(TeamType teamType)
+struct AITeam *aitCreate(TeamType teamType)
 {
-    AITeam *team;
+    struct AITeam *team;
 
-    team           = memAlloc(sizeof(AITeam), "aiteam", 0);
+    team           = memAlloc(sizeof(struct AITeam), "aiteam", 0);
     team->teamType = teamType;
 #if 0
     if (team->teamType == ScriptTeam)
@@ -75,7 +75,7 @@ AITeam *aitCreate(TeamType teamType)
     if (team->aiplayerowner->teamsUsed >= team->aiplayerowner->teamsAllocated)
     {
         // allocate more if necessary
-        team->aiplayerowner->teams = memRealloc(team->aiplayerowner->teams, sizeof(AITeam *) * (team->aiplayerowner->teamsAllocated + AITEAM_ALLOC_INCREMENT), "aiteamlist", 0);
+        team->aiplayerowner->teams = memRealloc(team->aiplayerowner->teams, sizeof(struct AITeam *) * (team->aiplayerowner->teamsAllocated + AITEAM_ALLOC_INCREMENT), "aiteamlist", 0);
         team->aiplayerowner->teamsAllocated += AITEAM_ALLOC_INCREMENT;
     }
     team->aiplayerowner->teams[team->aiplayerowner->teamsUsed++] = team;
@@ -110,7 +110,7 @@ AITeam *aitCreate(TeamType teamType)
     Outputs     : Deletes a bunch of moves
     Return      : The move or NULL
 ----------------------------------------------------------------------------*/
-AITeamMove *aitFindMoveOfType(AITeam *team, AIMoveTypes type)
+AITeamMove *aitFindMoveOfType(struct AITeam *team, AIMoveTypes type)
 {
     AITeamMove *move = team->curMove;
     Node *nextnode = move->listNode.next;
@@ -139,7 +139,7 @@ AITeamMove *aitFindMoveOfType(AITeam *team, AIMoveTypes type)
     Outputs     : delete's the team's current move
     Return      : nothing
 ----------------------------------------------------------------------------*/
-void aitDeleteCurrentMove(AITeam *team)
+void aitDeleteCurrentMove(struct AITeam *team)
 {
     AITeamMove *move = team->curMove;
     Node *nextnode = move->listNode.next;
@@ -163,7 +163,7 @@ void aitDeleteCurrentMove(AITeam *team)
     Outputs     : Deletes a bunch of moves
     Return      : void
 ----------------------------------------------------------------------------*/
-void aitDeleteMovesUntilMoveType(AITeam *team, AIMoveTypes type)
+void aitDeleteMovesUntilMoveType(struct AITeam *team, AIMoveTypes type)
 {
     AITeamMove *move = team->curMove;
     Node *nextnode = move->listNode.next;
@@ -188,7 +188,7 @@ void aitDeleteMovesUntilMoveType(AITeam *team, AIMoveTypes type)
 
 
 
-void aitDeleteAllTeamMoves(AITeam *team)
+void aitDeleteAllTeamMoves(struct AITeam *team)
 {
     Node *node;
     Node *nextnode;
@@ -215,7 +215,7 @@ void aitDeleteAllTeamMoves(AITeam *team)
 }
 
 
-void aitSpecialDefenseCoopTeamDiedCB(AITeam *team)
+void aitSpecialDefenseCoopTeamDiedCB(struct AITeam *team)
 {
     AITeamMove *thisMove = team->curMove, *newMove;
 
@@ -242,13 +242,13 @@ void aitSpecialDefenseCoopTeamDiedCB(AITeam *team)
 }
 
 
-void aitTakeoutMothershipGuardCoopTeamDiedCB(AITeam *team)
+void aitTakeoutMothershipGuardCoopTeamDiedCB(struct AITeam *team)
 {
     //small chance of going bezerk
     //large chance of going to find another big ship and guarding it.
 }
 
-void GenericCooperatingTeamDiedCB(AITeam *team)
+void GenericCooperatingTeamDiedCB(struct AITeam *team)
 {
     team->cooperatingTeam = NULL;
 }
@@ -259,7 +259,7 @@ void GenericCooperatingTeamDiedCB(AITeam *team)
 
 #pragma warning( 4 : 4047)      // turns off "different levels of indirection warning"
 
-void PreFixCooperatingTeamDiedCB(AITeam *team)
+void PreFixCooperatingTeamDiedCB(struct AITeam *team)
 {
     if (team->cooperatingTeamDiedCB == aitSpecialDefenseCoopTeamDiedCB)
     {
@@ -275,7 +275,7 @@ void PreFixCooperatingTeamDiedCB(AITeam *team)
     }
 }
 
-void FixCooperatingTeamDiedCB(AITeam *team)
+void FixCooperatingTeamDiedCB(struct AITeam *team)
 {
     switch ((sdword)team->cooperatingTeamDiedCB)
     {
@@ -308,7 +308,7 @@ void FixCooperatingTeamDiedCB(AITeam *team)
     Outputs     : Deallocates memory being used by the team, modifies a few structures
     Return      : void
 ----------------------------------------------------------------------------*/
-void aitDestroy(struct AIPlayer *aiplayer, AITeam *team, bool removeAllReferencesToTeam)
+void aitDestroy(struct AIPlayer *aiplayer, struct AITeam *team, bool removeAllReferencesToTeam)
 {
     sdword i = 0;
     sdword foundteam = -1;
@@ -386,7 +386,7 @@ void aitDestroy(struct AIPlayer *aiplayer, AITeam *team, bool removeAllReference
 ----------------------------------------------------------------------------*/
 void aitInit(struct AIPlayer *aiplayer)
 {
-    aiplayer->teams          = memAlloc(sizeof(AITeam*)*AITEAM_ALLOC_INITIAL, "aiteamlist", 0);
+    aiplayer->teams          = memAlloc(sizeof(struct AITeam*)*AITEAM_ALLOC_INITIAL, "aiteamlist", 0);
     aiplayer->teamsAllocated = AITEAM_ALLOC_INITIAL;
     aiplayer->teamsUsed      = 0;
 }
@@ -403,7 +403,7 @@ void aitInit(struct AIPlayer *aiplayer)
 ----------------------------------------------------------------------------*/
 void aitClose(struct AIPlayer *aiplayer)
 {
-    AITeam *team;
+    struct AITeam *team;
     udword i;
 
     //deallocate any team that's been created
@@ -422,7 +422,7 @@ void aitClose(struct AIPlayer *aiplayer)
 void aitShipDied(struct AIPlayer *aiplayer,ShipPtr ship)
 {
     udword i;
-    AITeam *team;
+    struct AITeam *team;
     Node *node;
     AITeamMove *move;
 
@@ -479,7 +479,7 @@ void aitShipDied(struct AIPlayer *aiplayer,ShipPtr ship)
 void aitResourceDied(struct AIPlayer *aiplayer, Resource *resource)
 {
     udword i;
-    AITeam *team;
+    struct AITeam *team;
     Node *node;
     AITeamMove *move;
 
@@ -508,7 +508,7 @@ void aitResourceDied(struct AIPlayer *aiplayer, Resource *resource)
     Outputs     : Move some ships around the selection
     Return      : TRUE if a leader is found
 ----------------------------------------------------------------------------*/
-bool aitCheckForLeaderAndMoveToFront(AITeam *team)
+bool aitCheckForLeaderAndMoveToFront(struct AITeam *team)
 {
     ShipPtr ship;
     udword i;
@@ -536,7 +536,7 @@ bool aitCheckForLeaderAndMoveToFront(AITeam *team)
     Outputs     :
     Return      : TRUE if the team is being watched
 ----------------------------------------------------------------------------*/
-bool aitCheckAmIBeingWatched(AITeam *team, SelectCommand *sel)
+bool aitCheckAmIBeingWatched(struct AITeam *team, SelectCommand *sel)
 {
     if (bitTest(team->teamFlags, TEAM_AmIBeingWatched))
     {
@@ -558,7 +558,7 @@ bool aitCheckAmIBeingWatched(AITeam *team, SelectCommand *sel)
     Outputs     :
     Return      : void
 ----------------------------------------------------------------------------*/
-void aitSetAmIBeingWatched(AITeam *team, SelectCommand *sel)
+void aitSetAmIBeingWatched(struct AITeam *team, SelectCommand *sel)
 {
     if (sel->numShips)
     {
@@ -580,7 +580,7 @@ void aitSetAmIBeingWatched(AITeam *team, SelectCommand *sel)
     Outputs     :
     Return      : void
 ----------------------------------------------------------------------------*/
-void aitAddShip(AITeam *team, ShipPtr ship)
+void aitAddShip(struct AITeam *team, ShipPtr ship)
 {
     growSelectAddShip(&team->shipList,ship);
     aitSetTeamHomoHetero(team);
@@ -605,7 +605,7 @@ void aitAddShip(AITeam *team, ShipPtr ship)
     }
 }
 
-void aitCheckShips(AITeam *team, ShipPtr ship)
+void aitCheckShips(struct AITeam *team, ShipPtr ship)
 {
     udword i;
 
@@ -626,7 +626,7 @@ void aitCheckShips(AITeam *team, ShipPtr ship)
     Outputs     : Removes the ship from defense swarm and adds it to the attacks swarm
     Return      : void
 ----------------------------------------------------------------------------*/
-void aitMoveSwarmShipDefenseToAttack(AITeam *attackSwarm, AITeam *defenseSwarm, ShipPtr ship)
+void aitMoveSwarmShipDefenseToAttack(struct AITeam *attackSwarm, struct AITeam *defenseSwarm, ShipPtr ship)
 {
     dbgAssert(ship->playerowner->playerIndex);
     dbgAssert(ship->objtype == OBJ_ShipType);
@@ -650,7 +650,7 @@ void aitMoveSwarmShipDefenseToAttack(AITeam *attackSwarm, AITeam *defenseSwarm, 
     Outputs     : Removes all the ships in the attack swarm and puts them into the defense swarm
     Return      : void
 ----------------------------------------------------------------------------*/
-void aitMoveAllSwarmShipsAttackToDefense(AITeam *attackSwarm, AITeam *defenseSwarm)
+void aitMoveAllSwarmShipsAttackToDefense(struct AITeam *attackSwarm, struct AITeam *defenseSwarm)
 {
     ShipPtr ship;
 
@@ -686,7 +686,7 @@ void aitMoveAllSwarmShipsAttackToDefense(AITeam *attackSwarm, AITeam *defenseSwa
     Outputs     : Removes all the ships in the attack swarm and puts them into the defense swarm
     Return      : void
 ----------------------------------------------------------------------------*/
-void aitMoveAllSwarmShipsDefenseToAttack(AITeam *defenseSwarm, AITeam *attackSwarm)
+void aitMoveAllSwarmShipsDefenseToAttack(struct AITeam *defenseSwarm, struct AITeam *attackSwarm)
 {
     ShipPtr ship;
 
@@ -728,7 +728,7 @@ void aitMoveAllSwarmShipsDefenseToAttack(AITeam *defenseSwarm, AITeam *attackSwa
     Outputs     : Moves ships from team to team
     Return      : void
 ----------------------------------------------------------------------------*/
-void aitMoveAllSwarmShipsDefense(AITeam *destTeam, AITeam *sourceTeam)
+void aitMoveAllSwarmShipsDefense(struct AITeam *destTeam, struct AITeam *sourceTeam)
 {
     ShipPtr ship;
 
@@ -757,7 +757,7 @@ void aitMoveAllSwarmShipsDefense(AITeam *destTeam, AITeam *sourceTeam)
     Outputs     : Moves ships from team to team
     Return      : void
 ----------------------------------------------------------------------------*/
-void aitMoveAllSwarmShipsAttack(AITeam *destTeam, AITeam *sourceTeam)
+void aitMoveAllSwarmShipsAttack(struct AITeam *destTeam, struct AITeam *sourceTeam)
 {
     ShipPtr ship;
 
@@ -785,10 +785,10 @@ void aitMoveAllSwarmShipsAttack(AITeam *destTeam, AITeam *sourceTeam)
     Outputs     :
     Return      : a pod team that has a pod and isn't the defense team's pod
 ----------------------------------------------------------------------------*/
-AITeam *aitFindNewPod(AITeam *defenseTeam)
+struct AITeam *aitFindNewPod(struct AITeam *defenseTeam)
 {
     udword i, lowestcnt, swarmcnt;
-    AITeam *podteam, *lowestteam;
+    struct AITeam *podteam, *lowestteam;
 
     for (i=0; i<aiCurrentAIPlayer->numSupportTeams;i++)
     {   // first try to find pods with no swarmers
@@ -829,11 +829,11 @@ AITeam *aitFindNewPod(AITeam *defenseTeam)
     Outputs     : Moves ships from team to team
     Return      : void
 ----------------------------------------------------------------------------*/
-void aitMoveSwarmersToNewPod(AITeam *defenseTeam, AITeam *podTeam)
+void aitMoveSwarmersToNewPod(struct AITeam *defenseTeam, struct AITeam *podTeam)
 {
-    AITeam *oldAttackTeam  = defenseTeam->cooperatingTeam;
-    AITeam *newAttackTeam  = podTeam->cooperatingTeam;
-    AITeam *newDefenseTeam = newAttackTeam->cooperatingTeam;
+    struct AITeam *oldAttackTeam  = defenseTeam->cooperatingTeam;
+    struct AITeam *newAttackTeam  = podTeam->cooperatingTeam;
+    struct AITeam *newDefenseTeam = newAttackTeam->cooperatingTeam;
 
     aitMoveAllSwarmShipsDefense(newDefenseTeam, defenseTeam);
     aitMoveAllSwarmShipsAttack(newAttackTeam, oldAttackTeam);
@@ -868,7 +868,7 @@ bool aitAllDefenseSwarmersFull(void)
 //
 // returns TRUE if removed ship
 //
-bool aitRemoveShip(AITeam *team, ShipPtr ship)
+bool aitRemoveShip(struct AITeam *team, ShipPtr ship)
 {
     return growSelectRemoveShip(&team->shipList,ship);
 }
@@ -885,7 +885,7 @@ bool aitRemoveShip(AITeam *team, ShipPtr ship)
     Outputs     : Sets some flags
     Return      : void
 ----------------------------------------------------------------------------*/
-void aitSetTeamSpecialFlags(AITeam *team)
+void aitSetTeamSpecialFlags(struct AITeam *team)
 {
     //set special flags
     if (!team->shipList.selection->numShips)
@@ -919,7 +919,7 @@ void aitSetTeamSpecialFlags(AITeam *team)
     Outputs     : May do some stuff... it may even create some other stuff as well
     Return      : void
 ----------------------------------------------------------------------------*/
-void aitProcessSpecialTeamCloakFighters(AITeam *team, AITeamMove *curMove)
+void aitProcessSpecialTeamCloakFighters(struct AITeam *team, AITeamMove *curMove)
 {
     switch (curMove->type)
     {
@@ -948,7 +948,7 @@ void aitProcessSpecialTeamCloakFighters(AITeam *team, AITeamMove *curMove)
     Outputs     : May do some stuff... it may even create some other stuff as well
     Return      : void
 ----------------------------------------------------------------------------*/
-void aitProcessSpecialTeamCloakedFighters(AITeam *team, AITeamMove *curMove)
+void aitProcessSpecialTeamCloakedFighters(struct AITeam *team, AITeamMove *curMove)
 {
     switch (curMove->type)
     {
@@ -971,7 +971,7 @@ void aitProcessSpecialTeamCloakedFighters(AITeam *team, AITeamMove *curMove)
     Outputs     : Stuff
     Return      : void
 ----------------------------------------------------------------------------*/
-void aitProcessSpecialTeamCloakGenerator(AITeam *team, AITeamMove *curCoopMove)
+void aitProcessSpecialTeamCloakGenerator(struct AITeam *team, AITeamMove *curCoopMove)
 {
     switch (curCoopMove->type)
     {
@@ -1007,7 +1007,7 @@ void aitProcessSpecialTeamCloakGenerator(AITeam *team, AITeamMove *curCoopMove)
     Outputs     : Stuff
     Return      : void
 ----------------------------------------------------------------------------*/
-void aitProcessSpecialTeamCloakingGenerator(AITeam *team, AITeamMove *curCoopMove)
+void aitProcessSpecialTeamCloakingGenerator(struct AITeam *team, AITeamMove *curCoopMove)
 {
     switch (curCoopMove->type)
     {
@@ -1038,10 +1038,10 @@ void aitProcessSpecialTeamCloakingGenerator(AITeam *team, AITeamMove *curCoopMov
     Outputs     : Adds some events to the team move structure
     Return      : void
 ----------------------------------------------------------------------------*/
-void aitOptimizeGravWellGenerator(AITeam *team)
+void aitOptimizeGravWellGenerator(struct AITeam *team)
 {
     AITeamMove *guardMove;
-    AITeam *coopTeam = team->cooperatingTeam;
+    struct AITeam *coopTeam = team->cooperatingTeam;
 
     //set the guard move event to turn on wheneven an enemy fighter is nearby
     //and off when there isn't or when goodguy fighter is nearby (within range)
@@ -1085,10 +1085,10 @@ void aitOptimizeGravWellGenerator(AITeam *team)
     Outputs     : Adds some events to the team move structure
     Return      : void
 ----------------------------------------------------------------------------*/
-void aitOptimizeCloakGenerator(AITeam *team)
+void aitOptimizeCloakGenerator(struct AITeam *team)
 {
 //    AITeamMove *guardMove;
-    AITeam *coopTeam = team->cooperatingTeam;
+    struct AITeam *coopTeam = team->cooperatingTeam;
 
     //make sure the team's cooperating team is slow
     //set the guard move event to turn on wheneven an enemy fighter is nearby
@@ -1116,7 +1116,7 @@ void aitOptimizeCloakGenerator(AITeam *team)
     Outputs     : May do some stuff...  May even create moves
     Return      : void
 ----------------------------------------------------------------------------*/
-void aitProcessSpecialTeam(AITeam *team, AITeamMove *curMove)
+void aitProcessSpecialTeam(struct AITeam *team, AITeamMove *curMove)
 {
     if ((aiuTeamFeatureEnabled(team, AIT_CLOAKING)) &&
         (bitTest(team->teamFlags, TEAM_CloakFighters)))
@@ -1201,13 +1201,13 @@ void aitProcessSpecialTeam(AITeam *team, AITeamMove *curMove)
                   the team
     Return      : void
 ----------------------------------------------------------------------------*/
-void aitAddmoveBeforeAndMakeCurrentNoSpecial(AITeam *team, AITeamMove *newMove, AITeamMove *thisMove)
+void aitAddmoveBeforeAndMakeCurrentNoSpecial(struct AITeam *team, AITeamMove *newMove, AITeamMove *thisMove)
 {
     listAddNodeBefore(&(thisMove->listNode), &(newMove->listNode), newMove);
     team->curMove = newMove;
 }
 
-void aitAddmoveBeforeAndMakeCurrent(AITeam *team, AITeamMove *newMove, AITeamMove *thisMove)
+void aitAddmoveBeforeAndMakeCurrent(struct AITeam *team, AITeamMove *newMove, AITeamMove *thisMove)
 {
     //if the tactics setting of the new move is different from the
     //old move, set tactics
@@ -1267,7 +1267,7 @@ udword aitFindNumTeamsWithFlag(udword flag)
     Outputs     :
     Return      : the next team
 ----------------------------------------------------------------------------*/
-AITeam *aitFindNextTeamWithFlag(AITeam *team, udword flag)
+struct AITeam *aitFindNextTeamWithFlag(struct AITeam *team, udword flag)
 {
     udword i=0;
 
@@ -1302,7 +1302,7 @@ AITeam *aitFindNextTeamWithFlag(AITeam *team, udword flag)
 sdword aitCountTeamsWaitingForShips(TeamType type)
 {
     sdword i, num_teams_waiting = 0;
-    AITeam *team;
+    struct AITeam *team;
 
     for (i=0;i<aiCurrentAIPlayer->teamsUsed;i++)
     {
@@ -1328,7 +1328,7 @@ sdword aitCountTeamsWaitingForShips(TeamType type)
 
 
 
-bool aitTeamIsDone(AITeam *team)
+bool aitTeamIsDone(struct AITeam *team)
 {
     if ((team->curMove == NULL) || (team->curMove->type == MOVE_DONE))
     {
@@ -1348,7 +1348,7 @@ bool aitTeamIsDone(AITeam *team)
     Outputs     :
     Return      : TRUE if team is being a slacker
 ----------------------------------------------------------------------------*/
-bool aitTeamIsIdle(AITeam *team)
+bool aitTeamIsIdle(struct AITeam *team)
 {
     if ((team->curMove == NULL) ||
         (team->curMove->type == MOVE_DONE) ||
@@ -1371,7 +1371,7 @@ bool aitTeamIsIdle(AITeam *team)
     Outputs     :
     Return      : TRUE if the team is guarding
 ----------------------------------------------------------------------------*/
-bool aitTeamIsGuarding(AITeam *team)
+bool aitTeamIsGuarding(struct AITeam *team)
 {
     AIMoveTypes moveType;
 
@@ -1398,7 +1398,7 @@ bool aitTeamIsGuarding(AITeam *team)
     Outputs     :
     Return      : TRUE if the team is attacking
 ----------------------------------------------------------------------------*/
-bool aitTeamIsAttacking(AITeam *team)
+bool aitTeamIsAttacking(struct AITeam *team)
 {
     AIMoveTypes moveType;
 
@@ -1425,7 +1425,7 @@ bool aitTeamIsAttacking(AITeam *team)
     Outputs     :
     Return      : TRUE if the team isn't defending the mothership
 ----------------------------------------------------------------------------*/
-bool aitTeamIsntDefendingMothership(AITeam *team, SelectCommand *enemyships)
+bool aitTeamIsntDefendingMothership(struct AITeam *team, SelectCommand *enemyships)
 {
     if (team->curMove != NULL)
     {
@@ -1462,7 +1462,7 @@ bool aitTeamIsntDefendingMothership(AITeam *team, SelectCommand *enemyships)
     Outputs     :
     Return      : TRUE if the team has finished moving
 ----------------------------------------------------------------------------*/
-bool aitTeamIsFinishedMoving(AITeam *team, vector destination, real32 range)
+bool aitTeamIsFinishedMoving(struct AITeam *team, vector destination, real32 range)
 {
     vector current_location;
     real32 avg_size;
@@ -1491,7 +1491,7 @@ bool aitTeamIsFinishedMoving(AITeam *team, vector destination, real32 range)
     Outputs     :
     Return      : TRUE if the team is special op'ing
 ----------------------------------------------------------------------------*/
-bool aitTeamIsDoingSpecialOp(AITeam *team)
+bool aitTeamIsDoingSpecialOp(struct AITeam *team)
 {
 //    dbgAssert(aitTeamShipTypeIs(MinelayerCorvette, team));
 
@@ -1513,7 +1513,7 @@ bool aitAnyTeamOfPlayerAttackingThisShip(struct AIPlayer *aiplayer,Ship *ship)
     sdword i;
     Node *node;
     AITeamMove *move;
-    AITeam *team;
+    struct AITeam *team;
 
     for (i = 0; i < aiplayer->teamsUsed; ++i)
     {
@@ -1554,7 +1554,7 @@ bool aitAnyTeamOfPlayerAttackingThisShip(struct AIPlayer *aiplayer,Ship *ship)
     Outputs     :
     Return      : True if the team is in range
 ----------------------------------------------------------------------------*/
-bool aitTeamIsInRange(AITeam *team, ShipPtr ship, real32 time)
+bool aitTeamIsInRange(struct AITeam *team, ShipPtr ship, real32 time)
 {
     real32 timesq = time*time, distsq, teamvelsq;
 
@@ -1593,7 +1593,7 @@ bool aitTeamIsInRange(AITeam *team, ShipPtr ship, real32 time)
     Outputs     :
     Return      : TRUE if the team is in range
 ----------------------------------------------------------------------------*/
-bool aitTeamIsInMothershipRange(AITeam *team)
+bool aitTeamIsInMothershipRange(struct AITeam *team)
 {
     ShipPtr mothership = team->aiplayerowner->player->PlayerMothership;
 
@@ -1620,7 +1620,7 @@ bool aitTeamIsInMothershipRange(AITeam *team)
     Outputs     : removes a few moves
     Return      : void
 ----------------------------------------------------------------------------*/
-void aitRecallGuardTeam(AITeam *team)
+void aitRecallGuardTeam(struct AITeam *team)
 {
     while (aitTeamIsAttacking(team))
     {
@@ -1640,7 +1640,7 @@ void aitRecallGuardTeam(AITeam *team)
 bool aitNeedStrikeSupport(udword minstr)
 {
     udword tally = 0, i;
-    AITeam *team;
+    struct AITeam *team;
 
     for (i=0; i<aiCurrentAIPlayer->teamsUsed;i++)
     {
@@ -1673,7 +1673,7 @@ bool aitNeedStrikeSupport(udword minstr)
     Outputs     : Duplicates ships selection into the support move structure
     Return      : void
 ----------------------------------------------------------------------------*/
-void aitMakeTeamSupportShips(AITeam *team, SelectCommand *ships)
+void aitMakeTeamSupportShips(struct AITeam *team, SelectCommand *ships)
 {
     AITeamMove *move;
 
@@ -1713,7 +1713,7 @@ void aitMakeTeamSupportShips(AITeam *team, SelectCommand *ships)
     Outputs     :
     Return      : TRUE if the team needs help
 ----------------------------------------------------------------------------*/
-bool aitCheckIfOtherDefTeamAnsweringSignalNeedsHelp(AITeam *team, SelectCommand *ships)
+bool aitCheckIfOtherDefTeamAnsweringSignalNeedsHelp(struct AITeam *team, SelectCommand *ships)
 {
     udword i;
     AITeamMove *move;
@@ -1762,7 +1762,7 @@ bool aitCheckIfOtherDefTeamAnsweringSignalNeedsHelp(AITeam *team, SelectCommand 
     Outputs     : sets some flags
     Return      : void
 ----------------------------------------------------------------------------*/
-void aitSetTeamHomoHetero(AITeam *team)
+void aitSetTeamHomoHetero(struct AITeam *team)
 {
     SelectCommand *teamShips = team->shipList.selection;
     ShipType firstShipType   = teamShips->ShipPtr[0]->shiptype;
@@ -1791,7 +1791,7 @@ void aitSetTeamHomoHetero(AITeam *team)
     Outputs     : Sets some flags
     Return      : TRUE if the team is homogenous
 ----------------------------------------------------------------------------*/
-bool aitTeamHomogenous(AITeam *team)
+bool aitTeamHomogenous(struct AITeam *team)
 {
     if (bitTest(team->teamFlags, TEAM_HOMOGENEOUS))
     {
@@ -1817,7 +1817,7 @@ bool aitTeamHomogenous(AITeam *team)
     Outputs     :
     Return      : void
 ----------------------------------------------------------------------------*/
-void aitSetTeamStrengthValue(AITeam *team)
+void aitSetTeamStrengthValue(struct AITeam *team)
 {
     udword i, shipstrength, shipvalue;
     SelectCommand *teamShips = team->shipList.selection;
@@ -1853,7 +1853,7 @@ void aitSetTeamStrengthValue(AITeam *team)
     Outputs     : Changes a the difficulty level number in the team structure
     Return      : the team's actual difficulty level
 ----------------------------------------------------------------------------*/
-ubyte aitSetTeamDifficultyLevel(AITeam *team, udword playerDL, udword  teamDL)
+ubyte aitSetTeamDifficultyLevel(struct AITeam *team, udword playerDL, udword  teamDL)
 {
     team->teamDifficultyLevel = (ubyte)(playerDL + teamDL);
 
@@ -1871,9 +1871,9 @@ ubyte aitSetTeamDifficultyLevel(AITeam *team, udword playerDL, udword  teamDL)
     Outputs     :
     Return      : The nth most valueable team
 ----------------------------------------------------------------------------*/
-AITeam *aitFindMostValuable(udword valueness)
+struct AITeam *aitFindMostValuable(udword valueness)
 {
-    AITeam *valueArray[10];
+    struct AITeam *valueArray[10];
     udword i, j, k;
 
     dbgAssert(valueness <= 10);
@@ -1926,10 +1926,10 @@ AITeam *aitFindMostValuable(udword valueness)
     Outputs     :
     Return      : TRUE if the team isn't cooperating with another cloak team
 ----------------------------------------------------------------------------*/
-bool aitTeamIsntCoopWithAnotherTeam_Cloak(AITeam *testteam)
+bool aitTeamIsntCoopWithAnotherTeam_Cloak(struct AITeam *testteam)
 {
     udword i;
-    AITeam *team;
+    struct AITeam *team;
 
     for (i=0;i<aiCurrentAIPlayer->teamsUsed;i++)
     {
@@ -1954,10 +1954,10 @@ bool aitTeamIsntCoopWithAnotherTeam_Cloak(AITeam *testteam)
     Outputs     :
     Return      : TRUE if the team isn't cooperating with another cloak team
 ----------------------------------------------------------------------------*/
-bool aitTeamIsntCoopWithAnotherTeam_GravWell(AITeam *testteam)
+bool aitTeamIsntCoopWithAnotherTeam_GravWell(struct AITeam *testteam)
 {
     udword i;
-    AITeam *team;
+    struct AITeam *team;
 
     for (i=0;i<aiCurrentAIPlayer->teamsUsed;i++)
     {
@@ -1985,9 +1985,9 @@ bool aitTeamIsntCoopWithAnotherTeam_GravWell(AITeam *testteam)
     Outputs     :
     Return      : returns a pointer to a team
 ----------------------------------------------------------------------------*/
-AITeam *aitFindCloakGeneratorCoopTeam(void)
+struct AITeam *aitFindCloakGeneratorCoopTeam(void)
 {
-    AITeam *resconTeam = NULL, *frigTeam = NULL, *team;
+    struct AITeam *resconTeam = NULL, *frigTeam = NULL, *team;
     udword i;
 
     //cloaking the resource controller ROCKS
@@ -2045,9 +2045,9 @@ AITeam *aitFindCloakGeneratorCoopTeam(void)
     Outputs     :
     Return      : returns a pointer to a team
 ----------------------------------------------------------------------------*/
-AITeam *aitFindGravWellGeneratorCoopTeam(void)
+struct AITeam *aitFindGravWellGeneratorCoopTeam(void)
 {
-    AITeam *capTeam = NULL, *team;
+    struct AITeam *capTeam = NULL, *team;
     udword i;
 
     //frigates are also good to cloak
@@ -2083,7 +2083,7 @@ AITeam *aitFindGravWellGeneratorCoopTeam(void)
     Outputs     :
     Return      : the good coop team
 ----------------------------------------------------------------------------*/
-AITeam *aitFindGoodCoopTeam(ShipType type)
+struct AITeam *aitFindGoodCoopTeam(ShipType type)
 {
     switch (type)
     {
@@ -2112,7 +2112,7 @@ AITeam *aitFindGoodCoopTeam(ShipType type)
 void aitExecute(void)
 {
     sdword i;
-    AITeam *team;
+    struct AITeam *team;
     AITeamMove *lastMove, *thisMove;
 
     for (i = 0; i < aiCurrentAIPlayer->teamsUsed; ++i)
@@ -2229,7 +2229,7 @@ void aitExecute(void)
 //
 //  (really old msgs will be forgotten)
 //
-void aitMsgSend(AITeam *fromTeamp, AITeam *teamp, char *msg)
+void aitMsgSend(struct AITeam *fromTeamp, struct AITeam *teamp, char *msg)
 {
     MsgQueue *msgQP;
     sdword mlen;
@@ -2270,7 +2270,7 @@ void aitMsgSend(AITeam *fromTeamp, AITeam *teamp, char *msg)
 //  (msg will be removed from queue).
 //  returns 0 otherwise.
 //
-sdword aitMsgReceived(AITeam *teamp, char *msg)
+sdword aitMsgReceived(struct AITeam *teamp, char *msg)
 {
     MsgQueue *msgQP;
     sdword i;
@@ -2295,7 +2295,7 @@ sdword aitMsgReceived(AITeam *teamp, char *msg)
 //
 //  free up the entire msg queue (and all msgs)
 //
-void aitMsgQueueFree(AITeam *teamp)
+void aitMsgQueueFree(struct AITeam *teamp)
 {
     sdword i;
 
@@ -2316,7 +2316,7 @@ void aitMsgQueueFree(AITeam *teamp)
 
 #pragma warning( 4 : 4047)      // turns off "different levels of indirection warning"
 
-AITeam *savingThisAITeam = NULL;
+struct AITeam *savingThisAITeam = NULL;
 
 typedef void (*PreFix_Move)(AITeamMove *move);
 typedef void (*Save_Move)(AITeamMove *move);
@@ -2503,12 +2503,12 @@ MsgQueue *LoadMsgQueue(void)
     return msgQueue;
 }
 
-void SaveThisAITeam(AITeam *team)
+void SaveThisAITeam(struct AITeam *team)
 {
     SaveChunk *chunk;
-    AITeam *sc;
+    struct AITeam *sc;
 
-    chunk = CreateChunk(BASIC_STRUCTURE|AITEAM,sizeof(AITeam),team);
+    chunk = CreateChunk(BASIC_STRUCTURE|AITEAM,sizeof(struct AITeam),team);
     sc = chunkContents(chunk);
 
     sc->aiplayerowner = AIPlayerToNumber(team->aiplayerowner);
@@ -2534,16 +2534,16 @@ void SaveThisAITeam(AITeam *team)
     if (team->msgQueue) SaveMsgQueue(team->msgQueue);
 }
 
-AITeam *LoadThisAITeam()
+struct AITeam *LoadThisAITeam()
 {
     SaveChunk *chunk;
-    AITeam *team;
+    struct AITeam *team;
 
     chunk = LoadNextChunk();
-    VerifyChunk(chunk,BASIC_STRUCTURE|AITEAM,sizeof(AITeam));
+    VerifyChunk(chunk,BASIC_STRUCTURE|AITEAM,sizeof(struct AITeam));
 
-    team = memAlloc(sizeof(AITeam), "aiteam", 0);
-    memcpy(team,chunkContents(chunk),sizeof(AITeam));
+    team = memAlloc(sizeof(struct AITeam), "aiteam", 0);
+    memcpy(team,chunkContents(chunk),sizeof(struct AITeam));
     memFree(chunk);
 
     LoadGrowSelectionAndFix(&team->shipList);
@@ -2554,7 +2554,7 @@ AITeam *LoadThisAITeam()
     return team;
 }
 
-void FixThisAITeam(AITeam *team)
+void FixThisAITeam(struct AITeam *team)
 {
     team->aiplayerowner = NumberToAIPlayer((sdword)team->aiplayerowner);
 
@@ -2593,7 +2593,7 @@ void aitLoad(struct AIPlayer *aiplayer)
     aiplayer->teamsAllocated = LoadInfoNumber();
     aiplayer->teamsUsed = LoadInfoNumber();
 
-    aiplayer->teams = memAlloc(sizeof(AITeam*)*aiplayer->teamsAllocated, "aiteamlist", 0);
+    aiplayer->teams = memAlloc(sizeof(struct AITeam*)*aiplayer->teamsAllocated, "aiteamlist", 0);
 
     for (i=0;i<aiplayer->teamsUsed;i++)
     {

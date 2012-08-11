@@ -91,12 +91,12 @@ static bool aiaPriorityShipsConstraints(Ship *ship)
     Outputs     : Creates a few new moves for the recon team
     Return      : A pointer to the recon team if it was sent off
 ----------------------------------------------------------------------------*/
-AITeam *aiaSendRecon(SelectCommand *ships)
+struct AITeam *aiaSendRecon(SelectCommand *ships)
 {
     udword i;
     real32 distsq, min_distsq = REALlyBig, avg_size;
     vector ships_location = selCentrePointComputeGeneral((MaxSelection *)ships, &avg_size), team_location;
-    AITeam *team, *best_team;
+    struct AITeam *team, *best_team;
     AITeamMove *newMove;
 
     // find the closest recon team
@@ -151,7 +151,7 @@ AITeam *aiaSendRecon(SelectCommand *ships)
 void aiaArmada(void)
 {
     vector dest_target;
-    AITeam *recon_team;
+    struct AITeam *recon_team;
     AITeamMove *recon_move;
     SelectCommand *sel_target = NULL;
     bool visibility;
@@ -261,7 +261,7 @@ ShipPtr aiaGetTakeoutTarget(void)
     Outputs     : Creates a new team or two
     Return      : void
 ----------------------------------------------------------------------------*/
-bool aiaGenerateAttackType(AITeam *newteam, AttackType attacktype, bool ForceBig)
+bool aiaGenerateAttackType(struct AITeam *newteam, AttackType attacktype, bool ForceBig)
 {
     ShipPtr ship;
     bool return_value = FALSE;
@@ -609,7 +609,7 @@ void aiaProcessSpecialTeams(void)
 void aiaTimeAttack(void)
 {
     sdword varValue;
-	AITeam *team = NULL;
+	struct AITeam *team = NULL;
 
     switch (aiCurrentAIPlayer->aiplayerDifficultyLevel)
     {
@@ -684,7 +684,7 @@ void aiaTimeAttack(void)
 ----------------------------------------------------------------------------*/
 void aiaProcessHarassTeams(void)
 {
-    AITeam *harassTeams[MAX_NUM_HARASS_TEAMS], *team;
+    struct AITeam *harassTeams[MAX_NUM_HARASS_TEAMS], *team;
     AITeamMove *move;
     udword i, team_num = 0, numAttTeams = aiCurrentAIPlayer->numAttackTeams, retreat_probability;
     ShipPtr teamShip;
@@ -845,7 +845,7 @@ bool aiaDivideNewShips(void)
 ----------------------------------------------------------------------------*/
 void aiaCleanupTeams(void)
 {
-    AITeam *team = NULL;
+    struct AITeam *team = NULL;
     udword i;
 
     for (i=0;i<aiCurrentAIPlayer->numAttackTeams;)
@@ -934,7 +934,7 @@ void aiaProcessFrigates(void)
 void aiaCleanUpSwarmers(void)
 {
     udword i;
-    AITeam *team;
+    struct AITeam *team;
 
     for (i=0;i<aiCurrentAIPlayer->numSupportTeams;i++)
     {
@@ -1213,7 +1213,7 @@ void aiaP2AttackManager(void)
     Non AI Related Stuff:
 =============================================================================*/
 //temporary bug fixin'
-bool aiaPlayerCanBuildShipType(ShipType shiptype, AIPlayer *aiplayer)
+bool aiaPlayerCanBuildShipType(ShipType shiptype, struct AIPlayer *aiplayer)
 {
     ShipStaticInfo *teststatic;
     ShipRace race;

@@ -7,11 +7,12 @@
 =============================================================================*/
 
 #ifndef SW_Render
-#include <windows.h>
+//#include <windows.h>
+#include "PrecompiledHeader.h"
 #endif
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
+//#include <math.h>
 #include <float.h>
 #include "glinc.h"
 #include "types.h"
@@ -42,7 +43,7 @@
 #include "kas.h"
 #include "commandWrap.h"
 #include "strings.h"
-#include "bink.h"
+//#include "bink.h"
 #include "render.h"
 #include "eval.h"
 #include "tracking.h"
@@ -1720,10 +1721,10 @@ real32 nisUpdate(nisplaying *NIS, real32 timeElapsed)
     sdword index, j;
     nisevent *event;
 
-    if (!binkDonePlaying)
-    {
-        return 0.0000001f;
-    }
+    //if (!binkDonePlaying)
+    //{
+    //    return 0.0000001f;
+    //}
 
 #if NIS_CAMERA_RELEASE
     if (keyIsStuck(NIS_CAMERA_RELEASE))

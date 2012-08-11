@@ -7,7 +7,7 @@ Copyright Relic Entertainment, Inc.  All rights reserved.
 =============================================================================*/
 
 #include "glinc.h"
-#include <math.h>
+//#include <math.h>
 #include <string.h>
 #include "shader.h"
 #include "clipper.h"

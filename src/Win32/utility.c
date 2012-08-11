@@ -6,7 +6,7 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <winreg.h>
+//#include <winreg.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

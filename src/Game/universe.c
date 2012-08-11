@@ -7,7 +7,7 @@
     Copyright Relic Entertainment, Inc.  All rights reserved.
 =============================================================================*/
 
-#include <math.h>
+//#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 #include "types.h"

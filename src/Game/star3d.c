@@ -7,7 +7,7 @@
 =============================================================================*/
 
 #include <stdlib.h>
-#include <math.h>
+//#include <math.h>
 #include "types.h"
 #include "vector.h"
 #include "matrix.h"

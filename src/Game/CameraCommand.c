@@ -8,7 +8,7 @@
 =============================================================================*/
 
 #include <string.h>
-#include <math.h>
+//#include <math.h>
 #include "types.h"
 #include "fastmath.h"
 #include "debug.h"

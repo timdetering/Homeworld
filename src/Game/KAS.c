@@ -51,8 +51,8 @@ char CurrentMissionScopeName[KAS_MISSION_NAME_MAX_LENGTH+1];
 
 char CurrentMissionName[KAS_MISSION_NAME_MAX_LENGTH+1];
 KASWatchFunction CurrentMissionWatchFunction = NULL;
-AITeam *CurrentTeamP = NULL;
-AITeam *kasUnpausedTeam = NULL;
+struct AITeam *CurrentTeamP = NULL;
+struct AITeam *kasUnpausedTeam = NULL;
 sdword CurrentMissionSkillLevel = 0;
 
 #define kasThisTeamPtr CurrentTeamP
@@ -135,9 +135,9 @@ void kasJump(char *stateName, KASInitFunction initFunction, KASWatchFunction wat
 //
 //  "creates" an FSM and hands control of a team to it
 //
-void kasFSMCreate(char *fsmName, KASInitFunction initFunction, KASWatchFunction watchFunction, AITeam *teamP)
+void kasFSMCreate(char *fsmName, KASInitFunction initFunction, KASWatchFunction watchFunction, struct AITeam *teamP)
 {
-    AITeam *saveP;
+    struct AITeam *saveP;
     sdword saveScope;
     char SaveMissionScopeName[KAS_MISSION_NAME_MAX_LENGTH+1];
 
@@ -240,10 +240,10 @@ void kasMissionStart(char *name, KASInitFunction initFunction, KASWatchFunction 
 //
 //  return reference to labelled team
 //
-AITeam *kasAITeamPtr(char *label)
+struct AITeam *kasAITeamPtr(char *label)
 {
     sdword i = 0;
-    AITeam *aiteamp = NULL;
+    struct AITeam *aiteamp = NULL;
 
     while (i < aiCurrentAIPlayer->teamsUsed)
     {
@@ -268,7 +268,7 @@ AITeam *kasAITeamPtr(char *label)
 GrowSelection *kasAITeamShipsPtr(char *label)
 {
     sdword i = 0;
-    AITeam *aiteamp;
+    struct AITeam *aiteamp;
 
     while (i < aiCurrentAIPlayer->teamsUsed)
     {
@@ -682,7 +682,7 @@ void kasLabelledEntitiesDestroy(void)
 //  Returns teamName (& fills it in).
 //  If not found, returns "NULL" or something like that.
 //
-char *kasAITeamName(AITeam *team, char *teamName)
+char *kasAITeamName(struct AITeam *team, char *teamName)
 {
     if (team)
         strcpy(teamName, team->kasLabel);
@@ -701,7 +701,7 @@ char *kasAITeamName(AITeam *team, char *teamName)
 void kasAddShipToTeam(Ship *ship,char *label)
 {
     sdword i;
-    AITeam *teamp;
+    struct AITeam *teamp;
 
     // if labelled team doesn't currently exist, create it
     // otherwise, add ships to existing labelled team
@@ -886,7 +886,7 @@ void kasDebugDraw(void)
 {
     sdword rowHeight, y, x, i;
 //    fonthandle fhSave;
-    AITeam *CurrentTeamP;
+    struct AITeam *CurrentTeamP;
     sdword remaining;
     Timer *tp;
     char buf[256];

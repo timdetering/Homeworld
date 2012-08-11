@@ -13,7 +13,7 @@
 #include <time.h>
 #include <direct.h>
 #include <io.h>
-#include <math.h>
+//#include <math.h>
 #include "types.h"
 #include "globals.h"
 #include "glinc.h"

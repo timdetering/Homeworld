@@ -137,7 +137,7 @@ void enum_dd_devices(d3d_context* d3d)
 
     ddList.erase(ddList.begin(), ddList.end());
 
-    hr = DirectDrawEnumerate(enum_dd_devices_cb, NULL);
+    hr = DirectDrawEnumerateA(enum_dd_devices_cb, NULL);
     if (FAILED(hr))
     {
         errLog("enum_dd_devices(DirectDrawCreate)", hr);

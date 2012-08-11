@@ -1,5 +1,5 @@
 #include <windows.h>
-#include <winreg.h>
+//#include <winreg.h>
 #include "ClientCDKey.h"
 
 bool WriteCDKeyToRegistryUnencrypted(char *string)

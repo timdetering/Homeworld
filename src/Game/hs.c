@@ -6,7 +6,7 @@ Created 7/10/1998 by khent
 Copyright Relic Entertainment, Inc.  All rights reserved.
 =============================================================================*/
 
-#include <math.h>
+//#include <math.h>
 #include "glinc.h"
 #include "prim3d.h"
 #include "render.h"
